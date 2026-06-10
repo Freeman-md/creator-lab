@@ -1,70 +1,109 @@
-"use client";
+import Link from "next/link";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldContent,
+  FieldGroup,
+  FieldLabel,
+  FieldSeparator,
+} from "@/components/ui/field";
+import { GoogleIcon } from "@/components/icons/google-icon";
+import { LinkedInIcon } from "@/components/icons/linkedin-icon";
+import { signInWithPassword } from "../actions";
 
-import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+type LoginFormProps = {
+  initialError?: string;
+  initialMessage?: string;
+};
 
-const CALLBACK_URL = "http://127.0.0.1:3000/auth/callback";
-
-export function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
-    setMessage(null);
-
-    const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: CALLBACK_URL,
-      },
-    });
-
-    if (signInError) {
-      setError(signInError.message);
-      setIsSubmitting(false);
-      return;
-    }
-
-    setMessage("Check your email for the magic link.");
-    setIsSubmitting(false);
-  }
-
+export function LoginForm({ initialError, initialMessage }: LoginFormProps) {
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-4">
-      <input
-        type="email"
-        name="email"
-        placeholder="you@example.com"
-        required
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        className="rounded-md border border-zinc-300 px-4 py-3 outline-none"
-      />
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="rounded-md bg-black px-4 py-3 text-white disabled:opacity-60"
-      >
-        {isSubmitting ? "Sending..." : "Send magic link"}
-      </button>
+    <form action={signInWithPassword} className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          className="h-10 justify-center gap-2 rounded-lg border-border bg-background text-sm text-foreground"
+        >
+          <GoogleIcon className="size-4" />
+          Continue with Google
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="h-10 justify-center gap-2 rounded-lg border-border bg-background text-sm text-foreground"
+        >
+          <LinkedInIcon className="size-4 text-[#0A66C2]" />
+          Continue with LinkedIn
+        </Button>
+      </div>
 
-      {message ? (
-        <p className="rounded-md bg-green-50 px-4 py-3 text-sm text-green-700">
-          {message}
-        </p>
+      <FieldSeparator className="my-0">
+        <span className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground">
+          Or
+        </span>
+      </FieldSeparator>
+
+      <FieldGroup className="gap-5">
+        <Field>
+          <FieldContent>
+            <FieldLabel htmlFor="email" className="mb-1 text-sm text-foreground">
+              Email address
+            </FieldLabel>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+              className="w-full border-0 border-b border-border bg-transparent px-0 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-0"
+            />
+          </FieldContent>
+        </Field>
+
+        <Field>
+          <FieldContent>
+            <div className="mb-1 flex items-center justify-between gap-4">
+              <FieldLabel htmlFor="password" className="text-sm text-foreground">
+                Password
+              </FieldLabel>
+              <Link
+                href="/"
+                className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Forgot?
+              </Link>
+            </div>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              required
+              className="w-full border-0 border-b border-border bg-transparent px-0 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-0"
+            />
+          </FieldContent>
+        </Field>
+      </FieldGroup>
+
+      {initialMessage ? (
+        <Alert className="border-emerald-200 bg-emerald-50 text-emerald-700">
+          <AlertDescription>{initialMessage}</AlertDescription>
+        </Alert>
       ) : null}
 
-      {error ? (
-        <p className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
-          {error}
-        </p>
+      {initialError ? (
+        <Alert variant="destructive" className="border-red-200 bg-red-50 text-red-700">
+          <AlertDescription className="text-red-700">
+            {initialError}
+          </AlertDescription>
+        </Alert>
       ) : null}
+
+      <Button type="submit" className="h-10 rounded-lg text-sm">
+        Sign in
+      </Button>
     </form>
   );
 }
