@@ -1,13 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 import {
-  Archive,
   Bell,
   CircleUserRound,
   FileText,
   HelpCircle,
   LayoutGrid,
+  MessageSquareMore,
   Plus,
-  Search,
   Settings2,
   Sparkles,
 } from "lucide-react";
@@ -23,12 +22,12 @@ export type DashboardActionItem = {
   label: string;
 };
 
-export type DashboardHeaderLink = {
-  href: string;
-  label: string;
-};
-
 export const dashboardPrimaryNav: DashboardNavItem[] = [
+  {
+    href: "/dashboard",
+    icon: LayoutGrid,
+    label: "Dashboard",
+  },
   {
     href: "/posts",
     icon: FileText,
@@ -47,31 +46,12 @@ export const dashboardFooterNav: DashboardActionItem[] = [
     label: "Support",
   },
   {
-    icon: Archive,
-    label: "Archive",
-  },
-];
-
-export const dashboardHeaderLinks: DashboardHeaderLink[] = [
-  {
-    href: "/posts",
-    label: "Drafts",
-  },
-  {
-    href: "/posts",
-    label: "Published",
-  },
-  {
-    href: "/posts",
-    label: "Analytics",
+    icon: MessageSquareMore,
+    label: "Feedback",
   },
 ];
 
 export const dashboardUtilityActions = [
-  {
-    icon: Search,
-    label: "Search",
-  },
   {
     icon: Bell,
     label: "Notifications",
@@ -83,5 +63,4 @@ export const dashboardUtilityActions = [
 ];
 
 export const dashboardCtaIcon = Plus;
-export const dashboardBrandIcon = LayoutGrid;
 export const dashboardUpgradeIcon = Sparkles;

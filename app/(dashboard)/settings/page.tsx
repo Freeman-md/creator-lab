@@ -1,18 +1,15 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DashboardPageHeader } from "../components/dashboard-page-header";
 
 export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6">
-      <div className="space-y-2">
-        <h1 className="font-heading text-3xl font-semibold tracking-tight">
-          Platform Configuration
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Manage your workspace settings and AI integrations.
-        </p>
-      </div>
+      <DashboardPageHeader
+        title="Platform Configuration"
+        description="Manage your workspace settings and AI integrations."
+      />
 
       <Card className="shadow-none">
         <CardHeader className="space-y-1 p-5">

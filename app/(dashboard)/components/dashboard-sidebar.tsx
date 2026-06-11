@@ -31,7 +31,10 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
         className,
       )}
     >
-      <div className="flex h-16 items-center gap-3 border-b border-border px-5">
+      <Link
+        href="/dashboard"
+        className="flex h-16 items-center gap-3 border-b border-border px-5"
+      >
         <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
           <CreatorLabLogoIcon className="size-4" />
         </div>
@@ -39,7 +42,7 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
           <p className="truncate text-sm font-semibold text-foreground">Creator Lab</p>
           <p className="text-xs text-muted-foreground">Studio Precision</p>
         </div>
-      </div>
+      </Link>
 
       <div className="flex flex-1 flex-col px-3 py-4">
         <Button className="mb-5 h-10 w-full justify-center gap-2 rounded-md">
