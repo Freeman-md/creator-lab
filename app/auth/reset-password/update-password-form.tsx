@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { SocialAuthButtons } from "../components/social-auth-buttons";
-import type { AuthFeedback } from "../types";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,35 +6,31 @@ import {
   FieldContent,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
 } from "@/components/ui/field";
-import { signInWithPassword } from "../actions";
+import { updatePassword } from "../actions";
+import type { AuthFeedback } from "../types";
 
-type LoginFormProps = AuthFeedback;
+type UpdatePasswordFormProps = AuthFeedback;
 
-export function LoginForm({ error, message }: LoginFormProps) {
+export function UpdatePasswordForm({ error, message }: UpdatePasswordFormProps) {
   return (
-    <form action={signInWithPassword} className="flex flex-col gap-6">
-      <SocialAuthButtons />
-
-      <FieldSeparator className="my-0">
-        <span className="text-[12px] uppercase tracking-[0.18em] text-muted-foreground">
-          Or
-        </span>
-      </FieldSeparator>
+    <form action={updatePassword} className="flex flex-col gap-6">
+      <p className="text-sm leading-6 text-muted-foreground">
+        Choose a new password for your Creator Lab account.
+      </p>
 
       <FieldGroup className="gap-5">
         <Field>
           <FieldContent>
-            <FieldLabel htmlFor="email" className="mb-1 text-sm text-foreground">
-              Email address
+            <FieldLabel htmlFor="password" className="mb-1 text-sm text-foreground">
+              New password
             </FieldLabel>
             <input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              autoComplete="email"
+              id="password"
+              type="password"
+              name="password"
+              placeholder="At least 8 characters"
+              autoComplete="new-password"
               required
               className="w-full border-0 border-b border-border bg-transparent px-0 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-0"
             />
@@ -45,23 +39,18 @@ export function LoginForm({ error, message }: LoginFormProps) {
 
         <Field>
           <FieldContent>
-            <div className="mb-1 flex items-center justify-between gap-4">
-              <FieldLabel htmlFor="password" className="text-sm text-foreground">
-                Password
-              </FieldLabel>
-              <Link
-                href="/auth/forgot-password"
-                className="text-xs text-muted-foreground transition-colors hover:text-foreground"
-              >
-                Forgot password?
-              </Link>
-            </div>
+            <FieldLabel
+              htmlFor="confirmPassword"
+              className="mb-1 text-sm text-foreground"
+            >
+              Confirm new password
+            </FieldLabel>
             <input
-              id="password"
+              id="confirmPassword"
               type="password"
-              name="password"
-              placeholder="••••••••"
-              autoComplete="current-password"
+              name="confirmPassword"
+              placeholder="Repeat your new password"
+              autoComplete="new-password"
               required
               className="w-full border-0 border-b border-border bg-transparent px-0 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-0"
             />
@@ -82,8 +71,20 @@ export function LoginForm({ error, message }: LoginFormProps) {
       ) : null}
 
       <Button type="submit" className="h-10 rounded-lg text-sm">
-        Sign in
+        Update password
       </Button>
+
+      <div className="text-center text-sm text-muted-foreground">
+        <p>
+          Back to{" "}
+          <Link
+            href="/auth/login"
+            className="font-medium text-foreground hover:underline"
+          >
+            Sign in
+          </Link>
+        </p>
+      </div>
     </form>
   );
 }

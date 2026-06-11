@@ -4,7 +4,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
+  forgotPasswordSchema,
   resendVerificationSchema,
+  resetPasswordSchema,
   signInSchema,
   signUpSchema,
 } from "./schemas";
@@ -60,6 +62,11 @@ async function getRequestOrigin() {
 async function getEmailVerificationRedirectTo() {
   const origin = await getRequestOrigin();
   return `${origin}/auth/callback?next=/auth/verified`;
+}
+
+async function getPasswordResetRedirectTo() {
+  const origin = await getRequestOrigin();
+  return `${origin}/auth/callback?next=/auth/reset-password`;
 }
 
 export async function signInWithPassword(formData: FormData) {
@@ -155,6 +162,58 @@ export async function resendVerificationEmail(formData: FormData) {
   redirectWith("/auth/verify-email", {
     email: parsed.data.email,
     message: "Verification email sent. Check your inbox.",
+  });
+}
+
+export async function requestPasswordReset(formData: FormData) {
+  const parsed = forgotPasswordSchema.safeParse(extractEmail(formData));
+
+  if (!parsed.success) {
+    redirectWith("/auth/forgot-password", {
+      error: parsed.error.issues[0]?.message ?? "Enter a valid email address.",
+    });
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
+    redirectTo: await getPasswordResetRedirectTo(),
+  });
+
+  if (error) {
+    redirectWith("/auth/forgot-password", { error: error.message });
+  }
+
+  redirectWith("/auth/forgot-password", {
+    message: "If an account exists for that email, we sent a reset link.",
+  });
+}
+
+export async function updatePassword(formData: FormData) {
+  const parsed = resetPasswordSchema.safeParse({
+    password: String(formData.get("password") ?? ""),
+    confirmPassword: String(formData.get("confirmPassword") ?? ""),
+  });
+
+  if (!parsed.success) {
+    redirectWith("/auth/reset-password", {
+      error:
+        parsed.error.issues[0]?.message ?? "Enter and confirm your new password.",
+    });
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({
+    password: parsed.data.password,
+  });
+
+  if (error) {
+    redirectWith("/auth/reset-password", { error: error.message });
+  }
+
+  await supabase.auth.signOut();
+
+  redirectWith("/auth/login", {
+    message: "Password updated. Sign in with your new password.",
   });
 }
 
