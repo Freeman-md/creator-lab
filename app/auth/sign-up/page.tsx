@@ -12,39 +12,37 @@ export default async function SignUpPage({
   const params = await searchParams;
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-6 text-foreground">
-      <div className="w-full max-w-[400px]">
-        <div className="mb-6 flex flex-col items-center text-center">
-          <div className="mb-4 flex size-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-            <CreatorLabLogoIcon className="size-7" />
-          </div>
-          <h1 className="mb-1 font-heading text-[32px] leading-[1.2] tracking-[-0.02em] text-foreground">
-            Create your account
-          </h1>
-          <p className="text-sm text-muted-foreground">Start using Creator Lab</p>
+    <>
+      <div className="mb-6 flex flex-col items-center text-center">
+        <div className="mb-4 flex size-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+          <CreatorLabLogoIcon className="size-7" />
         </div>
-
-        <Card>
-          <CardHeader className="sr-only">
-            <h2>Authentication</h2>
-          </CardHeader>
-          <CardContent className="p-10">
-            <SignUpForm {...params} />
-          </CardContent>
-        </Card>
-
-        <div className="mt-6 text-center text-sm text-muted-foreground">
-          <p>
-            Already have an account?{" "}
-            <Link
-              href="/auth/login"
-              className="font-medium text-foreground hover:underline"
-            >
-              Sign in
-            </Link>
-          </p>
-        </div>
+        <h1 className="mb-1 font-heading text-[32px] leading-[1.2] tracking-[-0.02em] text-foreground">
+          Create your account
+        </h1>
+        <p className="text-sm text-muted-foreground">Start using Creator Lab</p>
       </div>
-    </main>
+
+      <Card>
+        <CardHeader className="sr-only">
+          <h2>Authentication</h2>
+        </CardHeader>
+        <CardContent className="p-10">
+          <SignUpForm {...params} />
+        </CardContent>
+      </Card>
+
+      <div className="mt-6 text-center text-sm text-muted-foreground">
+        <p>
+          Already have an account?{" "}
+          <Link
+            href="/auth/login"
+            className="font-medium text-foreground hover:underline"
+          >
+            Sign in
+          </Link>
+        </p>
+      </div>
+    </>
   );
 }
