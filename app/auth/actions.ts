@@ -1,6 +1,5 @@
 "use server";
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -10,67 +9,17 @@ import {
   signInSchema,
   signUpSchema,
 } from "./schemas";
-import type { AuthRedirectParams } from "./types";
-
-function redirectWith(pathname: string, params: AuthRedirectParams): never {
-  const searchParams = new URLSearchParams();
-
-  Object.entries(params).forEach(([key, value]) => {
-    if (value) {
-      searchParams.set(key, value);
-    }
-  });
-
-  const search = searchParams.toString();
-  redirect(search ? `${pathname}?${search}` : pathname);
-}
-
-function extractFields(formData: FormData) {
-  return {
-    email: String(formData.get("email") ?? ""),
-    password: String(formData.get("password") ?? ""),
-  };
-}
-
-function extractEmail(formData: FormData) {
-  return {
-    email: String(formData.get("email") ?? ""),
-  };
-}
-
-async function getRequestOrigin() {
-  const headerStore = await headers();
-  const origin = headerStore.get("origin");
-
-  if (origin) {
-    return origin;
-  }
-
-  const host =
-    headerStore.get("x-forwarded-host") ??
-    headerStore.get("host") ??
-    "localhost:3000";
-  const protocol =
-    headerStore.get("x-forwarded-proto") ??
-    (host.startsWith("localhost") || host.startsWith("127.0.0.1")
-      ? "http"
-      : "https");
-
-  return `${protocol}://${host}`;
-}
-
-async function getEmailVerificationRedirectTo() {
-  const origin = await getRequestOrigin();
-  return `${origin}/auth/callback?next=/auth/verified`;
-}
-
-async function getPasswordResetRedirectTo() {
-  const origin = await getRequestOrigin();
-  return `${origin}/auth/callback?next=/auth/reset-password`;
-}
+import {
+  extractCredentials,
+  extractEmail,
+  extractPasswordReset,
+  getEmailVerificationRedirectTo,
+  getPasswordResetRedirectTo,
+  redirectWith,
+} from "./utils";
 
 export async function signInWithPassword(formData: FormData) {
-  const parsed = signInSchema.safeParse(extractFields(formData));
+  const parsed = signInSchema.safeParse(extractCredentials(formData));
 
   if (!parsed.success) {
     redirectWith(
@@ -100,7 +49,7 @@ export async function signInWithPassword(formData: FormData) {
 }
 
 export async function signUpWithPassword(formData: FormData) {
-  const parsed = signUpSchema.safeParse(extractFields(formData));
+  const parsed = signUpSchema.safeParse(extractCredentials(formData));
 
   if (!parsed.success) {
     redirectWith(
@@ -189,10 +138,7 @@ export async function requestPasswordReset(formData: FormData) {
 }
 
 export async function updatePassword(formData: FormData) {
-  const parsed = resetPasswordSchema.safeParse({
-    password: String(formData.get("password") ?? ""),
-    confirmPassword: String(formData.get("confirmPassword") ?? ""),
-  });
+  const parsed = resetPasswordSchema.safeParse(extractPasswordReset(formData));
 
   if (!parsed.success) {
     redirectWith("/auth/reset-password", {
