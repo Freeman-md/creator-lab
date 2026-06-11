@@ -10,13 +10,13 @@ import {
   FieldLabel,
   FieldSeparator,
 } from "@/components/ui/field";
-import { signInWithPassword } from "../actions";
+import { signUpWithPassword } from "../actions";
 
-type LoginFormProps = AuthFeedback;
+type SignUpFormProps = AuthFeedback;
 
-export function LoginForm({ error, message }: LoginFormProps) {
+export function SignUpForm({ error, message }: SignUpFormProps) {
   return (
-    <form action={signInWithPassword} className="flex flex-col gap-6">
+    <form action={signUpWithPassword} className="flex flex-col gap-6">
       <SocialAuthButtons />
 
       <FieldSeparator className="my-0">
@@ -50,18 +50,18 @@ export function LoginForm({ error, message }: LoginFormProps) {
                 Password
               </FieldLabel>
               <Link
-                href="/auth/sign-up"
+                href="/auth/login"
                 className="text-xs text-muted-foreground transition-colors hover:text-foreground"
               >
-                Need an account?
+                Already have an account?
               </Link>
             </div>
             <input
               id="password"
               type="password"
               name="password"
-              placeholder="••••••••"
-              autoComplete="current-password"
+              placeholder="At least 8 characters"
+              autoComplete="new-password"
               required
               className="w-full border-0 border-b border-border bg-transparent px-0 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-0"
             />
@@ -82,7 +82,7 @@ export function LoginForm({ error, message }: LoginFormProps) {
       ) : null}
 
       <Button type="submit" className="h-10 rounded-lg text-sm">
-        Sign in
+        Create account
       </Button>
     </form>
   );
