@@ -41,6 +41,28 @@ export async function signInWithGoogle() {
   redirect(data.url);
 }
 
+export async function signInWithLinkedIn() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "linkedin_oidc",
+    options: {
+      redirectTo: await getAuthCallbackUrl(),
+    },
+  });
+
+  if (error) {
+    redirectWith("/auth/login", { error: error.message });
+  }
+
+  if (!data.url) {
+    redirectWith("/auth/login", {
+      error: "Unable to start LinkedIn sign in. Try again.",
+    });
+  }
+
+  redirect(data.url);
+}
+
 export async function signInWithPassword(formData: FormData) {
   const parsed = signInSchema.safeParse(extractCredentials(formData));
 

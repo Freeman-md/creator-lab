@@ -1,7 +1,7 @@
 import { GoogleIcon } from "@/components/icons/google-icon";
 import { LinkedInIcon } from "@/components/icons/linkedin-icon";
 import { Button } from "@/components/ui/button";
-import { signInWithGoogle } from "../actions";
+import { signInWithGoogle, signInWithLinkedIn } from "../actions";
 
 export function SocialAuthButtons() {
   return (
@@ -17,7 +17,9 @@ export function SocialAuthButtons() {
         Continue with Google
       </Button>
       <Button
-        type="button"
+        type="submit"
+        formAction={signInWithLinkedIn}
+        formNoValidate
         variant="outline"
         className="h-10 justify-center gap-2 rounded-lg border-border bg-background text-sm text-foreground"
       >
