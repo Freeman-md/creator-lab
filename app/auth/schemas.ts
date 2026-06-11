@@ -21,3 +21,7 @@ export const signUpSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
 });
+
+export const resendVerificationSchema = z.object({
+  email: emailSchema,
+});

@@ -4,3 +4,9 @@ export type AuthFeedback = {
 };
 
 export type AuthFeedbackKey = keyof AuthFeedback;
+
+export type AuthPageSearchParams = AuthFeedback & {
+  email?: string;
+};
+
+export type AuthRedirectParams = Partial<AuthPageSearchParams>;
