@@ -59,12 +59,17 @@ export async function getRequestOrigin() {
   return `${protocol}://${host}`;
 }
 
-export async function getEmailVerificationRedirectTo() {
+export async function getAuthCallbackUrl() {
   const origin = await getRequestOrigin();
-  return `${origin}/auth/callback?next=/auth/verified`;
+  return `${origin}/auth/callback`;
+}
+
+export async function getEmailVerificationRedirectTo() {
+  const callbackUrl = await getAuthCallbackUrl();
+  return `${callbackUrl}?next=/auth/verified`;
 }
 
 export async function getPasswordResetRedirectTo() {
-  const origin = await getRequestOrigin();
-  return `${origin}/auth/callback?next=/auth/reset-password`;
+  const callbackUrl = await getAuthCallbackUrl();
+  return `${callbackUrl}?next=/auth/reset-password`;
 }

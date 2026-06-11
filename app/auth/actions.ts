@@ -13,10 +13,33 @@ import {
   extractCredentials,
   extractEmail,
   extractPasswordReset,
+  getAuthCallbackUrl,
   getEmailVerificationRedirectTo,
   getPasswordResetRedirectTo,
   redirectWith,
 } from "./utils";
+
+export async function signInWithGoogle() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: await getAuthCallbackUrl(),
+    },
+  });
+
+  if (error) {
+    redirectWith("/auth/login", { error: error.message });
+  }
+
+  if (!data.url) {
+    redirectWith("/auth/login", {
+      error: "Unable to start Google sign in. Try again.",
+    });
+  }
+
+  redirect(data.url);
+}
 
 export async function signInWithPassword(formData: FormData) {
   const parsed = signInSchema.safeParse(extractCredentials(formData));
