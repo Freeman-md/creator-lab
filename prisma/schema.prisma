@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model AccountProfile {
+  id                      String         @id @default(uuid()) @db.Uuid
+  userId                  String         @unique @map("user_id") @db.Uuid
+  currentProfileVersionId String         @map("current_profile_version_id") @db.Uuid
+  createdAt               DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  currentProfileVersion   ProfileVersion @relation("CurrentProfileVersion", fields: [currentProfileVersionId, userId], references: [id, userId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([currentProfileVersionId], map: "account_profiles_current_profile_version_id_idx")
+  @@map("account_profiles")
+}
+
+model ProfileVersion {
+  id                 String           @id @default(uuid()) @db.Uuid
+  userId             String           @map("user_id") @db.Uuid
+  version            Int
+  writingPreferences Json             @default("[]") @map("writing_preferences")
+  contentPatterns    Json             @default("[]") @map("content_patterns")
+  revisionPatterns   Json             @default("[]") @map("revision_patterns")
+  avoidPatterns      Json             @default("[]") @map("avoid_patterns")
+  userInstructions   Json             @default("[]") @map("user_instructions")
+  createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  currentForProfiles AccountProfile[] @relation("CurrentProfileVersion")
+
+  @@unique([id, userId], map: "profile_versions_id_user_id_key")
+  @@unique([userId, version], map: "profile_versions_user_id_version_key")
+  @@index([userId, createdAt], map: "profile_versions_user_id_created_at_idx")
+  @@map("profile_versions")
+}
