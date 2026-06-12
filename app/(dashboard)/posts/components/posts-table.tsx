@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { PostStatusBadge } from "./post-status-badge";
 
 type PostStatus = "Draft" | "Published";
 
@@ -71,21 +72,6 @@ const posts: PostRow[] = [
 const statusFilters = ["All", "Draft", "Published"] as const;
 
 type StatusFilter = (typeof statusFilters)[number];
-
-function StatusBadge({ status }: { status: PostStatus }) {
-  return (
-    <span
-      className={cn(
-        "inline-flex rounded-full px-2.5 py-1 text-xs font-medium",
-        status === "Published"
-          ? "bg-emerald-500/10 text-emerald-700"
-          : "bg-muted text-muted-foreground",
-      )}
-    >
-      {status}
-    </span>
-  );
-}
 
 export function PostsTable() {
   const [query, setQuery] = useState("");
@@ -148,13 +134,18 @@ export function PostsTable() {
               filteredPosts.map((post) => (
                 <TableRow key={post.title}>
                   <TableCell>
-                    <div className="space-y-1">
-                      <p className="font-medium text-foreground">{post.title}</p>
+                  <div className="space-y-1">
+                      <Link
+                        href="/posts/new"
+                        className="font-medium text-foreground transition-colors hover:text-primary"
+                      >
+                        {post.title}
+                      </Link>
                       <p className="text-sm text-muted-foreground">By {post.author}</p>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <StatusBadge status={post.status} />
+                    <PostStatusBadge status={post.status} />
                   </TableCell>
                   <TableCell className="text-muted-foreground">{post.channel}</TableCell>
                   <TableCell className="text-muted-foreground">{post.updatedAt}</TableCell>

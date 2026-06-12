@@ -45,9 +45,11 @@ export function DashboardSidebar({ className }: DashboardSidebarProps) {
       </Link>
 
       <div className="flex flex-1 flex-col px-3 py-4">
-        <Button className="mb-5 h-10 w-full justify-center gap-2 rounded-md">
-          <DashboardCtaIcon className="size-4" />
-          New Post
+        <Button asChild className="mb-5 h-10 w-full justify-center gap-2 rounded-md">
+          <Link href="/posts/new">
+            <DashboardCtaIcon data-icon="inline-start" />
+            New Post
+          </Link>
         </Button>
 
         <nav className="space-y-1">

@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  BarChart3,
+  History,
+  Send,
+} from "lucide-react";
 import { CreatorLabLogoIcon } from "@/components/icons/creator-lab-logo-icon";
+import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { dashboardPrimaryNav, dashboardUtilityActions } from "./navigation";
@@ -13,6 +19,57 @@ function isActive(pathname: string, href: string) {
 
 export function DashboardHeader() {
   const pathname = usePathname();
+  const isPostWorkspace = pathname === "/posts/new";
+
+  if (isPostWorkspace) {
+    return (
+      <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2 text-sm">
+            <Link
+              href="/posts"
+              className="shrink-0 text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Posts
+            </Link>
+            <span className="text-muted-foreground">/</span>
+            <span className="truncate font-medium text-foreground">
+              The Future of Interface Design
+            </span>
+            <Badge variant="outline" className="hidden shrink-0 sm:inline-flex">
+              Draft
+            </Badge>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="hidden rounded-md text-muted-foreground sm:inline-flex"
+              aria-label="Analytics"
+            >
+              <BarChart3 />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="hidden rounded-md text-muted-foreground sm:inline-flex"
+              aria-label="Version history"
+            >
+              <History />
+            </Button>
+            <Button variant="ghost" size="sm" className="hidden rounded-md sm:inline-flex">
+              Save Draft
+            </Button>
+            <Button size="sm" className="rounded-md">
+              Finalize
+              <Send data-icon="inline-end" />
+            </Button>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
