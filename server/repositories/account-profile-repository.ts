@@ -27,7 +27,7 @@ export function findAccountProfileWithCurrentVersion(
 }
 
 export function createAccountProfile(
-  data: Prisma.AccountProfileCreateInput,
+  data: Prisma.AccountProfileCreateInput | Prisma.AccountProfileUncheckedCreateInput,
   db: PrismaDbClient = prisma,
 ) {
   return db.accountProfile.create({

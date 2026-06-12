@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { ensureAccountProfile } from "@/server/services/account-profile-service";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -10,9 +11,10 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      await ensureAccountProfile(data.user.id);
       return NextResponse.redirect(`${origin}${safeNext}`);
     }
 

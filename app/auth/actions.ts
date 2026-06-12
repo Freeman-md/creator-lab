@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { ensureAccountProfile } from "@/server/services/account-profile-service";
 import {
   forgotPasswordSchema,
   resendVerificationSchema,
@@ -77,7 +78,7 @@ export async function signInWithPassword(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword(parsed.data);
+  const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
 
   if (error) {
     if (error.message.toLowerCase().includes("email not confirmed")) {
@@ -89,6 +90,8 @@ export async function signInWithPassword(formData: FormData) {
 
     redirectWith("/auth/login", { error: error.message });
   }
+
+  await ensureAccountProfile(data.user.id);
 
   redirect("/");
 }
@@ -118,7 +121,8 @@ export async function signUpWithPassword(formData: FormData) {
     redirectWith("/auth/sign-up", { error: error.message });
   }
 
-  if (data.session) {
+  if (data.session && data.user) {
+    await ensureAccountProfile(data.user.id);
     redirect("/");
   }
 
