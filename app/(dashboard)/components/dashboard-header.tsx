@@ -2,11 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  BarChart3,
-  History,
-  Send,
-} from "lucide-react";
+import { Send } from "lucide-react";
 import { CreatorLabLogoIcon } from "@/components/icons/creator-lab-logo-icon";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -42,25 +38,6 @@ export function DashboardHeader() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className="hidden rounded-md text-muted-foreground sm:inline-flex"
-              aria-label="Analytics"
-            >
-              <BarChart3 />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className="hidden rounded-md text-muted-foreground sm:inline-flex"
-              aria-label="Version history"
-            >
-              <History />
-            </Button>
-            <Button variant="ghost" size="sm" className="hidden rounded-md sm:inline-flex">
-              Save Draft
-            </Button>
             <Button size="sm" className="rounded-md">
               Finalize
               <Send data-icon="inline-end" />
