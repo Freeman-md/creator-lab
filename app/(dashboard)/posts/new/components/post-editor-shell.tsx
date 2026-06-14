@@ -26,7 +26,7 @@ function useIsDesktop() {
   return isDesktop;
 }
 
-export function PostWorkspaceShell() {
+export function PostEditorShell() {
   const isDesktop = useIsDesktop();
 
   return (

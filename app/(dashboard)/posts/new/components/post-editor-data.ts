@@ -1,4 +1,4 @@
-export const postWorkspaceDraft = {
+export const postEditorDraft = {
   title: "The Future of Interface Design",
   status: "Draft" as const,
   content: `As we move into an era of hyper-functional density, interfaces must adapt to become more quiet, serving as a frame rather than the artwork itself.
@@ -6,10 +6,10 @@ export const postWorkspaceDraft = {
 The core philosophy relies on reductionism: eliminating unnecessary borders, shadows, and cognitive load to prioritize user workflow and content generation.`,
   supportingContext:
     "Target audience: Senior product designers and developers. Tone should be authoritative but accessible. Emphasize 'reductionism'.",
-  referenceUrls: ["linear.app/design"],
+  referenceUrls: ["https://linear.app/design"],
 };
 
-export const postWorkspaceMessages = {
+export const postEditorMessages = {
   userPrompt:
     'Can you expand on the draft, focusing on the "reductionism" aspect? Make it sound more technical.',
   assistantIntro:

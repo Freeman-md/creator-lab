@@ -2,7 +2,7 @@ import { Bot, Check, Paperclip, Play, Send, WandSparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { postWorkspaceMessages } from "./post-workspace-data";
+import { postEditorMessages } from "./post-editor-data";
 
 export function AssistantPanel() {
   return (
@@ -10,12 +10,12 @@ export function AssistantPanel() {
       <div className="flex-1 space-y-8 overflow-y-auto px-6 py-8 lg:px-8 lg:py-10">
         <div className="flex flex-col items-center justify-center gap-3 py-8 text-center text-muted-foreground">
           <Bot className="size-8 text-foreground" />
-          <p className="max-w-xs text-sm leading-6">{postWorkspaceMessages.assistantIntro}</p>
+          <p className="max-w-xs text-sm leading-6">{postEditorMessages.assistantIntro}</p>
         </div>
 
         <div className="flex flex-col items-end gap-2">
           <div className="max-w-[85%] rounded-3xl rounded-tr-md border border-border bg-muted px-5 py-3 text-sm leading-6 text-foreground">
-            {postWorkspaceMessages.userPrompt}
+            {postEditorMessages.userPrompt}
           </div>
           <span className="text-xs text-muted-foreground">10:42 AM</span>
         </div>
@@ -26,21 +26,21 @@ export function AssistantPanel() {
             Assistant
           </div>
           <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
-            {postWorkspaceMessages.assistantSummary}
+            {postEditorMessages.assistantSummary}
           </p>
 
           <Card className="overflow-hidden rounded-2xl border-border shadow-none">
             <CardHeader className="flex flex-row items-center justify-between border-b border-border bg-muted/30 p-4">
               <div className="text-sm font-medium text-foreground">
-                {postWorkspaceMessages.suggestionTitle}
+                {postEditorMessages.suggestionTitle}
               </div>
               <span className="text-xs text-muted-foreground">
-                {postWorkspaceMessages.suggestionVersion}
+                {postEditorMessages.suggestionVersion}
               </span>
             </CardHeader>
             <CardContent className="space-y-4 p-4">
               <div className="space-y-4 text-sm leading-6 text-foreground">
-                {postWorkspaceMessages.suggestionBody.split("\n\n").map((paragraph) => (
+                {postEditorMessages.suggestionBody.split("\n\n").map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
@@ -60,7 +60,7 @@ export function AssistantPanel() {
 
       <div className="border-t border-border bg-card px-4 py-4 sm:px-6 lg:px-8">
         <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
-          {postWorkspaceMessages.quickActions.map((action) => (
+          {postEditorMessages.quickActions.map((action) => (
             <Button
               key={action}
               type="button"

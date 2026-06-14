@@ -15,9 +15,9 @@ function isActive(pathname: string, href: string) {
 
 export function DashboardHeader() {
   const pathname = usePathname();
-  const isPostWorkspace = pathname === "/posts/new";
+  const isPostEditor = pathname === "/posts/new";
 
-  if (isPostWorkspace) {
+  if (isPostEditor) {
     return (
       <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="flex h-16 items-center justify-between gap-4 px-4 sm:px-6">
@@ -29,9 +29,7 @@ export function DashboardHeader() {
               Posts
             </Link>
             <span className="text-muted-foreground">/</span>
-            <span className="truncate font-medium text-foreground">
-              The Future of Interface Design
-            </span>
+            <span className="truncate font-medium text-foreground">New Post</span>
             <Badge variant="outline" className="hidden shrink-0 sm:inline-flex">
               Draft
             </Badge>
