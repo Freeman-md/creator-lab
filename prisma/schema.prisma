@@ -29,9 +29,28 @@ model ProfileVersion {
   userInstructions   Json             @default("[]") @map("user_instructions")
   createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
   currentForProfiles AccountProfile[] @relation("CurrentProfileVersion")
+  posts              Post[]
 
   @@unique([id, userId], map: "profile_versions_id_user_id_key")
   @@unique([userId, version], map: "profile_versions_user_id_version_key")
   @@index([userId, createdAt], map: "profile_versions_user_id_created_at_idx")
   @@map("profile_versions")
+}
+
+model Post {
+  id                String         @id @default(uuid()) @db.Uuid
+  userId            String         @map("user_id") @db.Uuid
+  profileVersionId  String         @map("profile_version_id") @db.Uuid
+  title             String?
+  draftContent      String         @map("draft_content")
+  supportingContext String?        @map("supporting_context")
+  referenceUrls     Json           @default("[]") @map("reference_urls")
+  status            String         @default("draft")
+  createdAt         DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  profileVersion    ProfileVersion @relation(fields: [profileVersionId, userId], references: [id, userId], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([userId, createdAt], map: "posts_user_id_created_at_idx")
+  @@index([profileVersionId], map: "posts_profile_version_id_idx")
+  @@map("posts")
 }
