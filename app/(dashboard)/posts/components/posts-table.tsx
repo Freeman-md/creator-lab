@@ -26,6 +26,10 @@ type PostRow = {
   views: string;
 };
 
+function getPostHref(status: PostStatus) {
+  return status === "Published" ? "/posts/performance" : "/posts/new";
+}
+
 const posts: PostRow[] = [
   {
     title: "The Future of Design Systems",
@@ -134,9 +138,9 @@ export function PostsTable() {
               filteredPosts.map((post) => (
                 <TableRow key={post.title}>
                   <TableCell>
-                  <div className="space-y-1">
+                    <div className="flex flex-col gap-1">
                       <Link
-                        href="/posts/new"
+                        href={getPostHref(post.status)}
                         className="font-medium text-foreground transition-colors hover:text-primary"
                       >
                         {post.title}
