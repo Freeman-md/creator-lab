@@ -71,8 +71,18 @@ export function DraftEditorPanel() {
         </FieldGroup>
 
         <div className="mt-auto space-y-4">
+          {actionState.formError ? (
+            <p className="text-sm text-destructive">{actionState.formError}</p>
+          ) : null}
           {actionState.success && actionState.message ? (
-            <p className="text-sm text-emerald-600">{actionState.message}</p>
+            <div className="space-y-1">
+              <p className="text-sm text-emerald-600">{actionState.message}</p>
+              {actionState.postId ? (
+                <p className="text-xs text-muted-foreground">
+                  Draft post ID: {actionState.postId}
+                </p>
+              ) : null}
+            </div>
           ) : null}
           <Separator />
           <Button

@@ -1,6 +1,8 @@
 "use server";
 
 import type { PostActionState } from "./action-state";
+import { createClient } from "@/lib/supabase/server";
+import { createDraftPostForUser } from "@/server/services/post-service";
 import { postSchema } from "./schemas";
 
 export async function submitPostForm(
@@ -28,8 +30,39 @@ export async function submitPostForm(
     };
   }
 
-  return {
-    success: true,
-    message: "Form submitted successfully.",
-  };
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return {
+      success: false,
+      formError: "You must be signed in to create a draft post.",
+    };
+  }
+
+  try {
+    const { postId } = await createDraftPostForUser({
+      userId: user.id,
+      title: parsed.data.title,
+      draftContent: parsed.data.draftContent,
+      supportingContext: parsed.data.supportingContext,
+      referenceUrls: parsed.data.referenceUrls,
+    });
+
+    return {
+      success: true,
+      message: "Draft post created successfully.",
+      postId,
+    };
+  } catch (error) {
+    console.error(error)
+    
+    return {
+      success: false,
+      formError: "Unable to create draft post right now. Please try again.",
+    };
+  }
+
 }
