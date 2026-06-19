@@ -14,3 +14,7 @@ export type PostFormValues = Pick<
   PostRecord,
   "title" | "body" | "publishedDateTime" | "goal" | "category" | "audience"
 >;
+
+export type PostFormSubmitValues = Omit<PostFormValues, "title"> & {
+  title?: string;
+};

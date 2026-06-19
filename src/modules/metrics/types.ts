@@ -9,3 +9,8 @@ export type MetricsRecord = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type MetricsFormValues = Pick<
+  MetricsRecord,
+  "impressions" | "reactions" | "comments" | "reposts" | "profileVisits"
+>;
