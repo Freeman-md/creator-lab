@@ -29,6 +29,16 @@ const analysisSummaryFields = {
   confidence: v.union(v.literal("low"), v.literal("medium"), v.literal("high")),
 };
 
+const analysisSnapshotPostFields = {
+  id: v.string(),
+  title: v.optional(v.string()),
+  body: v.string(),
+  publishedDateTime: v.string(),
+  goal: v.string(),
+  category: v.string(),
+  audience: v.string(),
+};
+
 const lessonFields = {
   postId: v.id("posts"),
   analysisId: v.id("analyses"),
@@ -61,7 +71,7 @@ export default defineSchema({
       v.literal("failed")
     ),
     snapshot: v.object({
-      post: v.object(postFields),
+      post: v.object(analysisSnapshotPostFields),
       metrics: v.object({
         impressions: v.number(),
         reactions: v.number(),
