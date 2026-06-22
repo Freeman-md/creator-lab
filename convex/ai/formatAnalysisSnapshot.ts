@@ -1,6 +1,5 @@
 type AnalysisSnapshot = {
   post: {
-    id: string;
     title?: string;
     body: string;
     publishedDateTime: string;

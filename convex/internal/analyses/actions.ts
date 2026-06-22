@@ -4,11 +4,11 @@ import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { v } from "convex/values";
 
-import { internalAction } from "../_generated/server";
-import { api } from "../_generated/api";
-import { formatAnalysisSnapshot } from "../ai/formatAnalysisSnapshot";
-import { buildAnalysisInstructions } from "../ai/analysisPrompt";
-import { analysisOutputSchema } from "../ai/schemas";
+import { internalAction } from "../../_generated/server";
+import { api, internal } from "../../_generated/api";
+import { formatAnalysisSnapshot } from "../../ai/formatAnalysisSnapshot";
+import { buildAnalysisInstructions } from "../../ai/analysisPrompt";
+import { analysisOutputSchema } from "../../ai/schemas";
 
 function getClient() {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -25,14 +25,16 @@ export const runAnalysis = internalAction({
   },
   handler: async (ctx, args) => {
     try {
-      const detail = await ctx.runQuery(api.analyses.get, {
+      const internalDetail = await ctx.runQuery(internal.analyses.getInternal, {
         analysisId: args.analysisId,
       });
 
       const client = getClient();
       const model = process.env.OPENAI_ANALYSIS_MODEL ?? "gpt-4.1-mini";
       const snapshotMarkdown = formatAnalysisSnapshot(
-        detail.analysis.snapshot as Parameters<typeof formatAnalysisSnapshot>[0]
+        internalDetail.analysis.snapshot as Parameters<
+          typeof formatAnalysisSnapshot
+        >[0]
       );
       const completion = await client.chat.completions.parse({
         model,

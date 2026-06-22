@@ -11,7 +11,6 @@ describe("convex ai contracts", () => {
   test("formats the analysis snapshot as markdown", () => {
     const output = formatAnalysisSnapshot({
       post: {
-        id: "post_123",
         title: "Building before clarity",
         body: "Full LinkedIn post text here...",
         publishedDateTime: "2026-06-19T08:30:00Z",
@@ -37,9 +36,9 @@ describe("convex ai contracts", () => {
   test("formats the brief input as markdown", () => {
     const output = formatBriefInput({
       sourcePost: {
-        id: "post_123",
         title: "Building before clarity",
         body: "Full LinkedIn post text here...",
+        publishedDateTime: "2026-06-19T08:30:00Z",
         goal: "Show my product thinking process",
         category: "Building in public",
         audience: "Founders and builders",

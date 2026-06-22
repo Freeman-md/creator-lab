@@ -1,8 +1,55 @@
+import { Id } from "./_generated/dataModel";
 import { v } from "convex/values";
 
-import { mutation } from "./_generated/server";
+import { authMutation, authQuery } from "./server";
+import { getMetrics, getOwnedPost } from "./lib/helpers";
+import { toMetricsRecord } from "./lib/mappers";
 
-export const upsert = mutation({
+type UpsertMetricsArgs = {
+  postId: Id<"posts">;
+  impressions?: number;
+  reactions?: number;
+  comments?: number;
+  reposts?: number;
+  profileVisits?: number;
+};
+
+type MetricsPatchPayload = {
+  impressions?: number;
+  reactions?: number;
+  comments?: number;
+  reposts?: number;
+  profileVisits?: number;
+  updatedAt: number;
+};
+
+function getUpsertPayload(args: UpsertMetricsArgs): MetricsPatchPayload {
+  const payload: MetricsPatchPayload = {
+    updatedAt: Date.now(),
+  };
+
+  if (args.impressions !== undefined) payload.impressions = args.impressions;
+  if (args.reactions !== undefined) payload.reactions = args.reactions;
+  if (args.comments !== undefined) payload.comments = args.comments;
+  if (args.reposts !== undefined) payload.reposts = args.reposts;
+  if (args.profileVisits !== undefined) {
+    payload.profileVisits = args.profileVisits;
+  }
+
+  return payload;
+}
+
+export const getByPost = authQuery({
+  args: {
+    postId: v.id("posts"),
+  },
+  handler: async (ctx, args) => {
+    await getOwnedPost(ctx, args.postId);
+    return await getMetrics(ctx, args.postId);
+  },
+});
+
+export const upsert = authMutation({
   args: {
     postId: v.id("posts"),
     impressions: v.optional(v.number()),
@@ -12,56 +59,29 @@ export const upsert = mutation({
     profileVisits: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    const post = await ctx.db.get(args.postId);
-    if (!post) {
-      throw new Error("Post not found.");
-    }
+    await getOwnedPost(ctx, args.postId);
 
-    const now = new Date().toISOString();
-    const payload = {
-      impressions: args.impressions ?? 0,
-      reactions: args.reactions ?? 0,
-      comments: args.comments ?? 0,
-      reposts: args.reposts ?? 0,
-      profileVisits: args.profileVisits ?? 0,
-      updatedAt: now,
-    };
+    const payload = getUpsertPayload(args);
+    const existing = await getMetrics(ctx, args.postId);
 
-    const existing = await ctx.db
-      .query("metrics")
-      .withIndex("by_postId", (q) => q.eq("postId", args.postId))
-      .collect();
+    let metricsId;
 
-    const metricsId =
-      existing[0]?._id ??
-      (await ctx.db.insert("metrics", {
+    if (existing) {
+      await ctx.db.patch(existing._id, payload);
+      metricsId = existing._id;
+    } else {
+      metricsId = await ctx.db.insert("metrics", {
         postId: args.postId,
-        impressions: 0,
-        reactions: 0,
-        comments: 0,
-        reposts: 0,
-        profileVisits: 0,
-        createdAt: now,
-        updatedAt: now,
-      }));
-
-    await ctx.db.patch(metricsId, payload);
+        impressions: args.impressions ?? 0,
+        reactions: args.reactions ?? 0,
+        comments: args.comments ?? 0,
+        reposts: args.reposts ?? 0,
+        profileVisits: args.profileVisits ?? 0,
+        updatedAt: payload.updatedAt,
+      });
+    }
 
     const metrics = await ctx.db.get(metricsId);
-    if (!metrics) {
-      throw new Error("Metrics save failed.");
-    }
-
-    return {
-      id: metrics._id,
-      postId: metrics.postId,
-      impressions: metrics.impressions,
-      reactions: metrics.reactions,
-      comments: metrics.comments,
-      reposts: metrics.reposts,
-      profileVisits: metrics.profileVisits,
-      createdAt: metrics.createdAt,
-      updatedAt: metrics.updatedAt,
-    };
+    return toMetricsRecord(metrics);
   },
 });

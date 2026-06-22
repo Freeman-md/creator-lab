@@ -4,11 +4,11 @@ import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { v } from "convex/values";
 
-import { internalAction } from "../_generated/server";
-import { api } from "../_generated/api";
-import { formatBriefInput } from "../ai/formatBriefInput";
-import { buildBriefInstructions } from "../ai/briefPrompt";
-import { briefOutputSchema } from "../ai/schemas";
+import { internalAction } from "../../_generated/server";
+import { api, internal } from "../../_generated/api";
+import { formatBriefInput } from "../../ai/formatBriefInput";
+import { buildBriefInstructions } from "../../ai/briefPrompt";
+import { briefOutputSchema } from "../../ai/schemas";
 
 function getClient() {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -25,9 +25,10 @@ export const runBriefGeneration = internalAction({
   },
   handler: async (ctx, args) => {
     try {
-      const brief = await ctx.runQuery(api.briefs.get, {
+      const detail = await ctx.runQuery(internal.briefs.getInternal, {
         briefId: args.briefId,
       });
+      const brief = detail.brief;
       if (!brief) {
         throw new Error("Brief not found.");
       }

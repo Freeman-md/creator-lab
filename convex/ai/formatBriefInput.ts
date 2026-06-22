@@ -1,8 +1,8 @@
 type BriefInput = {
   sourcePost: {
-    id: string;
     title?: string;
     body: string;
+    publishedDateTime: string;
     goal: string;
     category: string;
     audience: string;
@@ -69,6 +69,8 @@ export function formatBriefInput(input: BriefInput) {
     titleLine,
     "",
     `Goal: ${input.sourcePost.goal}`,
+    "",
+    `Published: ${input.sourcePost.publishedDateTime}`,
     "",
     `Category: ${input.sourcePost.category}`,
     "",

@@ -1,31 +1,12 @@
 import { v } from "convex/values";
 
 import { internal } from "./_generated/api";
-import { query, mutation } from "./_generated/server";
-import { Doc } from "./_generated/dataModel";
+import { authMutation, authQuery, internalQuery, mutation } from "./server";
+import { ANALYSIS_STATUS, BRIEF_STATUS } from "./lib/constants";
+import { toBriefRecord } from "./lib/mappers";
+import { getOwnedAnalysis, getOwnedBrief } from "./lib/helpers";
 
-function toBriefRecord(brief: Doc<"briefs">) {
-  return {
-    id: brief._id,
-    postId: brief.postId,
-    analysisId: brief.analysisId,
-    status: brief.status,
-    input: brief.input,
-    repeat: brief.repeat,
-    avoid: brief.avoid,
-    improve: brief.improve,
-    nextPostAngle: brief.nextPostAngle,
-    nextPostReason: brief.nextPostReason,
-    nextPostReminder: brief.nextPostReminder,
-    errorMessage: brief.errorMessage,
-    startedAt: brief.startedAt,
-    completedAt: brief.completedAt,
-    createdAt: brief.createdAt,
-    updatedAt: brief.updatedAt,
-  };
-}
-
-export const get = query({
+export const get = authQuery({
   args: {
     briefId: v.optional(v.id("briefs")),
     analysisId: v.optional(v.id("analyses")),
@@ -35,38 +16,61 @@ export const get = query({
       return null;
     }
 
-    const brief =
-      args.briefId
-        ? await ctx.db.get(args.briefId)
-        : (
-            await ctx.db
-              .query("briefs")
-              .withIndex("by_analysisId", (q) =>
-                q.eq("analysisId", args.analysisId!)
-              )
-              .collect()
-          )[0] ?? null;
+    if (args.analysisId) {
+      await getOwnedAnalysis(ctx, args.analysisId);
+    }
+
+    const brief = args.briefId
+      ? (await getOwnedBrief(ctx, args.briefId)).brief
+      : (
+          await ctx.db
+            .query("briefs")
+            .withIndex("by_analysisId", (q) =>
+              q.eq("analysisId", args.analysisId!)
+            )
+            .collect()
+        )[0] ?? null;
 
     return brief ? toBriefRecord(brief) : null;
   },
 });
 
-export const create = mutation({
+export const getInternal = internalQuery({
+  args: {
+    briefId: v.id("briefs"),
+  },
+  handler: async (ctx, args) => {
+    const brief = await ctx.db.get(args.briefId);
+    if (!brief) {
+      throw new Error("Brief not found.");
+    }
+
+    const analysis = await ctx.db.get(brief.analysisId);
+    if (!analysis) {
+      throw new Error("Analysis not found.");
+    }
+
+    const post = await ctx.db.get(brief.postId);
+    if (!post) {
+      throw new Error("Post not found.");
+    }
+
+    return {
+      brief: toBriefRecord(brief),
+      analysisId: analysis._id,
+      postId: post._id,
+    };
+  },
+});
+
+export const create = authMutation({
   args: {
     analysisId: v.id("analyses"),
   },
   handler: async (ctx, args) => {
-    const analysis = await ctx.db.get(args.analysisId);
-    if (!analysis) {
-      throw new Error("Analysis not found.");
-    }
-    if (analysis.status !== "completed") {
+    const { analysis, post } = await getOwnedAnalysis(ctx, args.analysisId);
+    if (analysis.status !== ANALYSIS_STATUS.COMPLETED) {
       throw new Error("Brief generation requires a completed analysis.");
-    }
-
-    const post = await ctx.db.get(analysis.postId);
-    if (!post) {
-      throw new Error("Source post not found.");
     }
 
     const lessons = await ctx.db
@@ -86,9 +90,9 @@ export const create = mutation({
 
     const input = {
       sourcePost: {
-        id: post._id,
         title: post.title,
         body: post.body,
+        publishedDateTime: post.publishedDateTime,
         goal: post.goal,
         category: post.category,
         audience: post.audience,
@@ -110,7 +114,7 @@ export const create = mutation({
       })),
     };
 
-    const now = new Date().toISOString();
+    const now = Date.now();
     const existing = (
       await ctx.db
         .query("briefs")
@@ -121,37 +125,36 @@ export const create = mutation({
     let briefId = existing?._id;
 
     if (existing) {
-      if (existing.status === "completed" || existing.status === "in_progress") {
+      if (
+        existing.status === BRIEF_STATUS.COMPLETED ||
+        existing.status === BRIEF_STATUS.IN_PROGRESS
+      ) {
         return toBriefRecord(existing);
       }
 
       await ctx.db.replace(existing._id, {
         postId: analysis.postId,
         analysisId: args.analysisId,
-        status: "in_progress",
+        status: BRIEF_STATUS.IN_PROGRESS,
         input,
         startedAt: now,
-        createdAt: existing.createdAt,
         updatedAt: now,
       });
     } else {
       briefId = await ctx.db.insert("briefs", {
         postId: analysis.postId,
         analysisId: args.analysisId,
-        status: "in_progress",
+        status: BRIEF_STATUS.IN_PROGRESS,
         input,
         startedAt: now,
-        createdAt: now,
         updatedAt: now,
       });
     }
 
     await ctx.scheduler.runAfter(
       0,
-      internal.internal.briefJobs.runBriefGeneration,
-      {
-      briefId,
-      }
+      internal.internal.briefs.actions.runBriefGeneration,
+      { briefId }
     );
 
     const brief = await ctx.db.get(briefId);
@@ -182,13 +185,13 @@ export const complete = mutation({
     if (!brief) {
       throw new Error("Brief not found.");
     }
-    if (brief.status !== "in_progress") {
+    if (brief.status !== BRIEF_STATUS.IN_PROGRESS) {
       throw new Error("Only in-progress briefs can be completed.");
     }
 
-    const now = new Date().toISOString();
+    const now = Date.now();
     await ctx.db.patch(args.briefId, {
-      status: "completed",
+      status: BRIEF_STATUS.COMPLETED,
       repeat: args.output.repeat,
       avoid: args.output.avoid,
       improve: args.output.improve,
@@ -219,9 +222,9 @@ export const fail = mutation({
       throw new Error("Brief not found.");
     }
 
-    const now = new Date().toISOString();
+    const now = Date.now();
     await ctx.db.patch(args.briefId, {
-      status: "failed",
+      status: BRIEF_STATUS.FAILED,
       errorMessage: args.errorMessage,
       completedAt: now,
       updatedAt: now,

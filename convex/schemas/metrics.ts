@@ -8,8 +8,7 @@ export const metricsFields = {
   comments: v.number(),
   reposts: v.number(),
   profileVisits: v.number(),
-  createdAt: v.string(),
-  updatedAt: v.string(),
+  updatedAt: v.number(),
 }
 
 export const metricsTable = defineTable(metricsFields).index("by_postId", ["postId"])

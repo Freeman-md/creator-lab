@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { lessonFields } from "./lessons";
 import { patternFields } from "./patterns";
 import { defineTable } from "convex/server";
+import { BRIEF_STATUS } from "../lib/constants";
 import { omit } from "../lib/utils";
 import { postFields } from "./posts";
 
@@ -9,12 +10,12 @@ export const briefFields = {
     postId: v.id("posts"),
     analysisId: v.id("analyses"),
     status: v.union(
-        v.literal("in_progress"),
-        v.literal("completed"),
-        v.literal("failed")
+        v.literal(BRIEF_STATUS.IN_PROGRESS),
+        v.literal(BRIEF_STATUS.COMPLETED),
+        v.literal(BRIEF_STATUS.FAILED)
     ),
     input: v.object({
-        sourcePost: v.object(omit(postFields, ["userId", "createdAt", "updatedAt"])),
+        sourcePost: v.object(omit(postFields, ["userId", "updatedAt"])),
         analysis: v.object({
             content: v.string(),
             reasoning: v.string(),
@@ -46,10 +47,9 @@ export const briefFields = {
     nextPostReason: v.optional(v.string()),
     nextPostReminder: v.optional(v.string()),
     errorMessage: v.optional(v.string()),
-    startedAt: v.string(),
-    completedAt: v.optional(v.string()),
-    createdAt: v.string(),
-    updatedAt: v.string(),
+    startedAt: v.number(),
+    completedAt: v.optional(v.number()),
+    updatedAt: v.number(),
 }
 
 export const briefsTable = defineTable(briefFields)

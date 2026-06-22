@@ -9,11 +9,10 @@ export const postFields = {
     goal: v.string(),
     category: v.string(),
     audience: v.string(),
-    createdAt: v.string(),
-    updatedAt: v.string(),
+    updatedAt: v.number(),
 }
 
 export const postsTable = defineTable(postFields)
-                            .index("by_userId_and_publishedDateTime", ["userId", "publishedDateTime"])
-                            .index("by_publishedDateTime", ["publishedDateTime"])
-                            .index("by_updatedAt", ["updatedAt"])
+    .index("by_userId_and_publishedDateTime", ["userId", "publishedDateTime"])
+    .index("by_publishedDateTime", ["publishedDateTime"])
+    .index("by_updatedAt", ["updatedAt"])
