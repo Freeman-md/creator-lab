@@ -6,8 +6,8 @@ export type MetricsRecord = {
   comments: number;
   reposts: number;
   profileVisits: number;
-  createdAt: string;
-  updatedAt: string;
+  creationTime: string;
+  updatedAt: number;
 };
 
 export type MetricsFormValues = Pick<

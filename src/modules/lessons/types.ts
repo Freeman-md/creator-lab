@@ -6,5 +6,5 @@ export type LessonRecord = {
   analysisId: string;
   type: LessonType;
   content: string;
-  createdAt: string;
+  creationTime: string;
 };

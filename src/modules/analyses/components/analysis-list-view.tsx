@@ -113,7 +113,7 @@ function ConnectedAnalysisListView({ postId }: AnalysisListViewProps) {
                           Run {analyses.length - index}
                         </span>
                         <span className="text-xs text-muted-foreground">
-                          {new Date(analysis.createdAt).toLocaleString()}
+                          {new Date(analysis.creationTime).toLocaleString()}
                         </span>
                       </div>
                     </TableCell>

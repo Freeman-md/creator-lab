@@ -127,7 +127,6 @@ function ConnectedPostDetailView({ postId }: PostDetailViewProps) {
   };
 
   const latestAnalysis = postData.latestAnalysis;
-  const latestCompletedAnalysis = postData.latestCompletedAnalysis;
   const latestBrief = postData.latestBrief;
 
   return (
@@ -155,7 +154,7 @@ function ConnectedPostDetailView({ postId }: PostDetailViewProps) {
               tone={getStatusTone(latestBrief.status)}
             />
           ) : null}
-          {latestCompletedAnalysis?.stale ? (
+          {latestAnalysis?.stale ? (
             <StatusBadge label="Stale feedback" tone="warning" />
           ) : null}
         </>
@@ -177,14 +176,14 @@ function ConnectedPostDetailView({ postId }: PostDetailViewProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {latestCompletedAnalysis ? (
+              {latestAnalysis?.status === "completed" ? (
                 <div className="flex flex-col gap-4">
                   <div className="space-y-2">
                     <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                      Latest completed analysis
+                      Latest analysis
                     </p>
                     <p className="text-sm leading-6 text-foreground">
-                      {latestCompletedAnalysis.content}
+                      {latestAnalysis.content}
                     </p>
                   </div>
                   {latestBrief?.status === "completed" ? (
@@ -200,7 +199,7 @@ function ConnectedPostDetailView({ postId }: PostDetailViewProps) {
                   <div className="flex flex-wrap gap-3">
                     <Button asChild variant="outline">
                       <Link
-                        href={`/posts/${postId}/analyses/${latestCompletedAnalysis.id}`}
+                        href={`/posts/${postId}/analyses/${latestAnalysis.id}`}
                       >
                         Open latest analysis
                       </Link>
@@ -208,7 +207,7 @@ function ConnectedPostDetailView({ postId }: PostDetailViewProps) {
                     {latestBrief ? (
                       <Button asChild>
                         <Link
-                          href={`/posts/${postId}/analyses/${latestCompletedAnalysis.id}/brief`}
+                          href={`/posts/${postId}/analyses/${latestAnalysis.id}/brief`}
                         >
                           Open brief
                         </Link>
@@ -257,7 +256,7 @@ function ConnectedPostDetailView({ postId }: PostDetailViewProps) {
                   <FileClockIcon className="size-4" />
                   Analysis is running in the background now.
                 </div>
-              ) : latestCompletedAnalysis?.stale ? (
+              ) : latestAnalysis?.stale ? (
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <BarChart3Icon className="size-4" />
                   Post or metrics changed after the last completed run. A fresh

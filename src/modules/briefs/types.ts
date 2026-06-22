@@ -13,8 +13,8 @@ export type BriefRecord = {
   nextPostReason?: string;
   nextPostReminder?: string;
   errorMessage?: string;
-  startedAt: string;
-  completedAt?: string;
-  createdAt: string;
-  updatedAt: string;
+  startedAt: number;
+  completedAt?: number;
+  creationTime: string;
+  updatedAt: number;
 };

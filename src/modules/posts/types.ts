@@ -6,8 +6,8 @@ export type PostRecord = {
   goal: string;
   category: string;
   audience: string;
-  createdAt: string;
-  updatedAt: string;
+  creationTime: string;
+  updatedAt: number;
 };
 
 export type PostFormValues = Pick<

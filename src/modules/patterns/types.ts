@@ -8,5 +8,5 @@ export type PatternRecord = {
   score: number;
   name: string;
   description: string;
-  createdAt: string;
+  creationTime: string;
 };
