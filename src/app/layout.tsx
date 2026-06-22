@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Hanken_Grotesk, Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
 import { Providers } from "./providers";
@@ -36,7 +37,9 @@ export default function RootLayout({
       className={`${inter.variable} ${hankenGrotesk.variable} ${geistMono.variable} h-full bg-background antialiased`}
     >
       <body className="min-h-full bg-background text-foreground">
-        <Providers>{children}</Providers>
+        <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-in">
+          <Providers>{children}</Providers>
+        </ClerkProvider>
       </body>
     </html>
   );

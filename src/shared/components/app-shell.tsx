@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { AuthControls } from "@/shared/components/auth-controls";
 
 type AppShellProps = {
   title: string;
@@ -52,6 +53,7 @@ export function AppShell({
               <Button asChild size="sm">
                 <Link href="/posts/new">New Post</Link>
               </Button>
+              <AuthControls />
             </nav>
           </div>
           {actions ? <div className="flex flex-wrap items-center gap-3">{actions}</div> : null}

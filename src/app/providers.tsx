@@ -1,6 +1,8 @@
 "use client";
 
+import { useAuth } from "@clerk/nextjs";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ThemeProvider } from "next-themes";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -13,13 +15,23 @@ type ProvidersProps = {
   children: React.ReactNode;
 };
 
-export function Providers({ children }: ProvidersProps) {
-  const content = convex ? (
-    <ConvexProvider client={convex}>{children}</ConvexProvider>
-  ) : (
-    children
-  );
+function ConvexProviders({ children }: ProvidersProps) {
+  if (!convex) {
+    return children;
+  }
 
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+    return <ConvexProvider client={convex}>{children}</ConvexProvider>;
+  }
+
+  return (
+    <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+      {children}
+    </ConvexProviderWithClerk>
+  );
+}
+
+export function Providers({ children }: ProvidersProps) {
   return (
     <ThemeProvider
       attribute="class"
@@ -27,7 +39,7 @@ export function Providers({ children }: ProvidersProps) {
       enableSystem={false}
       disableTransitionOnChange
     >
-      {content}
+      <ConvexProviders>{children}</ConvexProviders>
       <Toaster richColors position="top-right" />
     </ThemeProvider>
   );
