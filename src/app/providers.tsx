@@ -1,8 +1,6 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ThemeProvider } from "next-themes";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -20,15 +18,7 @@ function ConvexProviders({ children }: ProvidersProps) {
     return children;
   }
 
-  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
-    return <ConvexProvider client={convex}>{children}</ConvexProvider>;
-  }
-
-  return (
-    <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-      {children}
-    </ConvexProviderWithClerk>
-  );
+  return <ConvexProvider client={convex}>{children}</ConvexProvider>;
 }
 
 export function Providers({ children }: ProvidersProps) {
