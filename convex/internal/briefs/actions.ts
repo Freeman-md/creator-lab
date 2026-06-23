@@ -3,9 +3,9 @@
 import { v } from "convex/values";
 import { internalAction } from "../../_generated/server";
 import { internal } from "../../_generated/api";
-import { formatBriefInput } from "../../ai/formatters/format-brief-snapshot";
+import { formatBriefInput } from "../../ai/formatters/BriefSnapshot";
 import { generateStructuredOutput } from "../../ai/service";
-import { buildBriefInstructions } from "../../ai/system-prompts";
+import { buildBriefInstructions } from "../../ai/prompts";
 import { briefOutputSchema } from "../../ai/schemas";
 
 export const runBriefGeneration = internalAction({

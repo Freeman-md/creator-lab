@@ -4,10 +4,10 @@ import { v } from "convex/values";
 
 import { internalAction } from "../../_generated/server";
 import { internal } from "../../_generated/api";
-import { formatAnalysisSnapshot } from "../../ai/formatters/format-analysis-snapshot";
+import { formatAnalysisSnapshot } from "../../ai/formatters/AnalysisSnapshot";
 import { analysisOutputSchema } from "../../ai/schemas";
 import { generateStructuredOutput } from "../../ai/service";
-import { buildAnalysisInstructions } from "../../ai/system-prompts";
+import { buildAnalysisInstructions } from "../../ai/prompts";
 
 export const runAnalysis = internalAction({
   args: {

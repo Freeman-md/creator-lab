@@ -8,9 +8,9 @@
  * @module
  */
 
-import type * as ai_briefPrompt from "../ai/briefPrompt.js";
-import type * as ai_formatAnalysisSnapshot from "../ai/formatters/format-analysis-snapshot.js";
-import type * as ai_formatBriefInput from "../ai/formatters/format-brief-snapshot.js";
+import type * as ai_formatters_AnalysisSnapshot from "../ai/formatters/AnalysisSnapshot.js";
+import type * as ai_formatters_BriefSnapshot from "../ai/formatters/BriefSnapshot.js";
+import type * as ai_prompts from "../ai/prompts.js";
 import type * as ai_schemas from "../ai/schemas.js";
 import type * as ai_service from "../ai/service.js";
 import type * as analyses from "../analyses.js";
@@ -48,9 +48,9 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  "ai/briefPrompt": typeof ai_briefPrompt;
-  "ai/formatAnalysisSnapshot": typeof ai_formatAnalysisSnapshot;
-  "ai/formatBriefInput": typeof ai_formatBriefInput;
+  "ai/formatters/AnalysisSnapshot": typeof ai_formatters_AnalysisSnapshot;
+  "ai/formatters/BriefSnapshot": typeof ai_formatters_BriefSnapshot;
+  "ai/prompts": typeof ai_prompts;
   "ai/schemas": typeof ai_schemas;
   "ai/service": typeof ai_service;
   analyses: typeof analyses;
