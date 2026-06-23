@@ -8,21 +8,27 @@
  * @module
  */
 
-import type * as ai_analysisPrompt from "../ai/analysisPrompt.js";
 import type * as ai_briefPrompt from "../ai/briefPrompt.js";
-import type * as ai_formatAnalysisSnapshot from "../ai/formatAnalysisSnapshot.js";
-import type * as ai_formatBriefInput from "../ai/formatBriefInput.js";
+import type * as ai_formatAnalysisSnapshot from "../ai/formatters/format-analysis-snapshot.js";
+import type * as ai_formatBriefInput from "../ai/formatters/format-brief-snapshot.js";
 import type * as ai_schemas from "../ai/schemas.js";
+import type * as ai_service from "../ai/service.js";
 import type * as analyses from "../analyses.js";
 import type * as briefs from "../briefs.js";
 import type * as internal_analyses_actions from "../internal/analyses/actions.js";
 import type * as internal_analyses_mutations from "../internal/analyses/mutations.js";
+import type * as internal_analyses_queries from "../internal/analyses/queries.js";
 import type * as internal_briefs_actions from "../internal/briefs/actions.js";
+import type * as internal_briefs_mutations from "../internal/briefs/mutations.js";
+import type * as internal_briefs_queries from "../internal/briefs/queries.js";
 import type * as internal_triggers from "../internal/triggers.js";
 import type * as lessons from "../lessons.js";
 import type * as lib_constants from "../lib/constants.js";
-import type * as lib_helpers from "../lib/helpers.js";
+import type * as lib_guards from "../lib/guards.js";
 import type * as lib_mappers from "../lib/mappers.js";
+import type * as lib_ownership from "../lib/ownership.js";
+import type * as lib_reads from "../lib/reads.js";
+import type * as lib_stale from "../lib/stale.js";
 import type * as lib_utils from "../lib/utils.js";
 import type * as metrics from "../metrics.js";
 import type * as patterns from "../patterns.js";
@@ -42,21 +48,27 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  "ai/analysisPrompt": typeof ai_analysisPrompt;
   "ai/briefPrompt": typeof ai_briefPrompt;
   "ai/formatAnalysisSnapshot": typeof ai_formatAnalysisSnapshot;
   "ai/formatBriefInput": typeof ai_formatBriefInput;
   "ai/schemas": typeof ai_schemas;
+  "ai/service": typeof ai_service;
   analyses: typeof analyses;
   briefs: typeof briefs;
   "internal/analyses/actions": typeof internal_analyses_actions;
   "internal/analyses/mutations": typeof internal_analyses_mutations;
+  "internal/analyses/queries": typeof internal_analyses_queries;
   "internal/briefs/actions": typeof internal_briefs_actions;
+  "internal/briefs/mutations": typeof internal_briefs_mutations;
+  "internal/briefs/queries": typeof internal_briefs_queries;
   "internal/triggers": typeof internal_triggers;
   lessons: typeof lessons;
   "lib/constants": typeof lib_constants;
-  "lib/helpers": typeof lib_helpers;
+  "lib/guards": typeof lib_guards;
   "lib/mappers": typeof lib_mappers;
+  "lib/ownership": typeof lib_ownership;
+  "lib/reads": typeof lib_reads;
+  "lib/stale": typeof lib_stale;
   "lib/utils": typeof lib_utils;
   metrics: typeof metrics;
   patterns: typeof patterns;

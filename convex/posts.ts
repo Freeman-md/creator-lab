@@ -5,10 +5,11 @@ import {
   getBrief,
   getLatestAnalysis,
   getMetrics,
-  getOwnedPost,
-} from "./lib/helpers";
+  getPostOrThrow,
+} from "./lib/reads";
 import { toPostRecord, toMetricsRecord, toAnalysisRecord, toBriefRecord } from "./lib/mappers";
 import { ANALYSIS_STATUS } from "./lib/constants";
+import { getOwnedPostOrThrow } from "./lib/ownership";
 
 export const getAll = authQuery({
   args: {},
@@ -52,7 +53,7 @@ export const get = authQuery({
   },
   handler: async (ctx, args) => {
     const [post, metrics, latestAnalysis] = await Promise.all([
-      getOwnedPost(ctx, args.postId),
+      getOwnedPostOrThrow(ctx, args.postId),
       getMetrics(ctx, args.postId),
       getLatestAnalysis(ctx, args.postId),
     ]);
@@ -93,7 +94,7 @@ export const create = authMutation({
       updatedAt: Date.now(),
     });
 
-    const post = await ctx.db.get(postId);
+    const post = await getPostOrThrow(ctx, postId)
 
     return toPostRecord(post!);
   },
@@ -110,9 +111,8 @@ export const update = authMutation({
     audience: v.string(),
   },
   handler: async (ctx, args) => {
-    await getOwnedPost(ctx, args.postId);
+    await getOwnedPostOrThrow(ctx, args.postId);
 
-    const now = Date.now();
     await ctx.db.patch(args.postId, {
       title: args.title?.trim() ? args.title.trim() : undefined,
       body: args.body.trim(),
@@ -120,11 +120,11 @@ export const update = authMutation({
       goal: args.goal.trim(),
       category: args.category.trim(),
       audience: args.audience.trim(),
-      updatedAt: now,
+      updatedAt: Date.now(),
     });
 
-    const post = await ctx.db.get(args.postId);
+    const post = await getPostOrThrow(ctx, args.postId)
 
-    return toPostRecord(post!);
+    return toPostRecord(post);
   },
 });

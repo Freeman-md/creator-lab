@@ -14,7 +14,7 @@ export const briefFields = {
         v.literal(BRIEF_STATUS.COMPLETED),
         v.literal(BRIEF_STATUS.FAILED)
     ),
-    input: v.object({
+    snapshot: v.object({
         sourcePost: v.object(omit(postFields, ["userId", "updatedAt"])),
         analysis: v.object({
             content: v.string(),

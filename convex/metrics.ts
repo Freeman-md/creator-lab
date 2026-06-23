@@ -2,8 +2,9 @@ import { Id } from "./_generated/dataModel";
 import { v } from "convex/values";
 
 import { authMutation, authQuery } from "./server";
-import { getMetrics, getOwnedPost } from "./lib/helpers";
+import { getMetrics } from "./lib/reads";
 import { toMetricsRecord } from "./lib/mappers";
+import { getOwnedPostOrThrow } from "./lib/ownership";
 
 type UpsertMetricsArgs = {
   postId: Id<"posts">;
@@ -44,7 +45,7 @@ export const getByPost = authQuery({
     postId: v.id("posts"),
   },
   handler: async (ctx, args) => {
-    await getOwnedPost(ctx, args.postId);
+    await getOwnedPostOrThrow(ctx, args.postId);
     return await getMetrics(ctx, args.postId);
   },
 });
@@ -59,7 +60,7 @@ export const upsert = authMutation({
     profileVisits: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    await getOwnedPost(ctx, args.postId);
+    await getOwnedPostOrThrow(ctx, args.postId);
 
     const payload = getUpsertPayload(args);
     const existing = await getMetrics(ctx, args.postId);

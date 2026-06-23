@@ -1,73 +1,102 @@
 import { v } from "convex/values";
 import { internalMutation } from "../triggers";
 import { ANALYSIS_STATUS } from "../../lib/constants";
+import { lesson } from "../../schemas/lessons";
+import { pattern } from "../../schemas/patterns";
+import { getAnalysisOrThrow } from "../../lib/reads";
+import { api, internal } from "../../_generated/api";
+import { toAnalysisRecord } from "../../lib/mappers";
 
-export const insert = internalMutation({
+export const complete = internalMutation({
   args: {
-    postId: v.id("posts"),
-    snapshot: v.object({
-      post: v.object({
-        title: v.optional(v.string()),
-        body: v.string(),
-        publishedDateTime: v.string(),
-        goal: v.string(),
-        category: v.string(),
-        audience: v.string(),
+    analysisId: v.id("analyses"),
+    output: v.object({
+      summary: v.object({
+        content: v.string(),
+        reasoning: v.string(),
+        confidence: v.union(
+          v.literal("low"),
+          v.literal("medium"),
+          v.literal("high")
+        ),
       }),
-      metrics: v.object({
-        impressions: v.number(),
-        reactions: v.number(),
-        comments: v.number(),
-        reposts: v.number(),
-        profileVisits: v.number(),
-      }),
+      lessons: v.array(
+        v.object(lesson)
+      ),
+      patterns: v.array(
+        v.object(pattern)
+      ),
     }),
-    startedAt: v.number(),
-    updatedAt: v.number(),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert("analyses", {
-      postId: args.postId,
-      status: ANALYSIS_STATUS.IN_PROGRESS,
+    const analysis = await getAnalysisOrThrow(ctx, args.analysisId)
+
+    if (analysis.status !== ANALYSIS_STATUS.IN_PROGRESS) {
+      throw new Error("Only in-progress analyses can be completed.");
+    }
+
+    const now = Date.now();
+    await ctx.db.patch(analysis._id, {
+      status: ANALYSIS_STATUS.COMPLETED,
       isStale: false,
-      snapshot: args.snapshot,
-      startedAt: args.startedAt,
-      updatedAt: args.updatedAt,
+      content: args.output.summary.content,
+      reasoning: args.output.summary.reasoning,
+      confidence: args.output.summary.confidence,
+      completedAt: now,
+      updatedAt: now,
     });
+
+    await Promise.all([
+      await ctx.runMutation(internal.lessons.replaceForAnalysis, {
+        postId: analysis.postId,
+        analysisId: analysis._id,
+        lessons: args.output.lessons,
+      }),
+
+      await ctx.runMutation(internal.patterns.replaceForAnalysis, {
+        postId: analysis.postId,
+        analysisId: analysis._id,
+        patterns: args.output.patterns,
+      })
+    ])
+
+    await ctx.runMutation(api.briefs.create, {
+      analysisId: analysis._id,
+    });
+
+    const completedAnalysis = await getAnalysisOrThrow(ctx, analysis._id)
+
+    return toAnalysisRecord(completedAnalysis);
   },
 });
 
-export const patch = internalMutation({
+export const fail = internalMutation({
   args: {
     analysisId: v.id("analyses"),
-    status: v.union(
-      v.literal(ANALYSIS_STATUS.COMPLETED),
-      v.literal(ANALYSIS_STATUS.FAILED)
-    ),
-    isStale: v.boolean(),
-    content: v.optional(v.string()),
-    reasoning: v.optional(v.string()),
-    confidence: v.optional(
-      v.union(
-        v.literal("low"),
-        v.literal("medium"),
-        v.literal("high")
-      )
-    ),
-    errorMessage: v.optional(v.string()),
-    completedAt: v.number(),
-    updatedAt: v.number(),
+    errorMessage: v.string(),
   },
   handler: async (ctx, args) => {
+    const analysis = await getAnalysisOrThrow(ctx, args.analysisId)
+
+    if (analysis.status !== ANALYSIS_STATUS.IN_PROGRESS) {
+      throw new Error("Only an in-progress analysis can be marked as failed.");
+    }
+
+    const now = Date.now();
     await ctx.db.patch(args.analysisId, {
-      status: args.status,
-      isStale: args.isStale,
-      content: args.content,
-      reasoning: args.reasoning,
-      confidence: args.confidence,
+      status: ANALYSIS_STATUS.FAILED,
+      isStale: false,
       errorMessage: args.errorMessage,
-      completedAt: args.completedAt,
-      updatedAt: args.updatedAt,
+      completedAt: now,
+      updatedAt: now,
     });
+
+    const failedAnalysis = await getAnalysisOrThrow(
+      ctx, 
+      analysis._id,
+      "Analysis failure state was not saved."
+    )
+
+    return toAnalysisRecord(failedAnalysis);
   },
 });

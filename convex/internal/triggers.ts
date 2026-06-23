@@ -8,7 +8,7 @@ import {
   mutation as rawMutation,
 } from "../_generated/server";
 /* eslint-enable no-restricted-imports */
-import { didMetricsChange, didPostChange, markLatestCompletedAnalysisStale } from "../lib/helpers";
+import { didMetricsChange, didPostChange, markLatestCompletedAnalysisStale } from "../lib/stale";
 
 const triggers = new Triggers<DataModel>();
 

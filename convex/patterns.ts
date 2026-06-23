@@ -2,14 +2,15 @@ import { v } from "convex/values";
 
 import { authQuery, internalMutation } from "./server";
 import { toPatternRecord } from "./lib/mappers";
-import { getOwnedAnalysis, getPatterns } from "./lib/helpers";
+import { getOwnedAnalysisOrThrow } from "./lib/ownership";
+import { getPatterns } from "./lib/reads";
 
 export const getByAnalysis = authQuery({
   args: {
     analysisId: v.id("analyses"),
   },
   handler: async (ctx, args) => {
-    await getOwnedAnalysis(ctx, args.analysisId);
+    await getOwnedAnalysisOrThrow(ctx, args.analysisId);
 
     const patterns = await getPatterns(ctx, args.analysisId);
 

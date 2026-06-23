@@ -1,23 +1,13 @@
 "use node";
 
-import OpenAI from "openai";
-import { zodResponseFormat } from "openai/helpers/zod";
 import { v } from "convex/values";
 
 import { internalAction } from "../../_generated/server";
-import { api, internal } from "../../_generated/api";
-import { formatAnalysisSnapshot } from "../../ai/formatAnalysisSnapshot";
-import { buildAnalysisInstructions } from "../../ai/analysisPrompt";
+import { internal } from "../../_generated/api";
+import { formatAnalysisSnapshot } from "../../ai/formatters/format-analysis-snapshot";
 import { analysisOutputSchema } from "../../ai/schemas";
-
-function getClient() {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is not configured for Convex analysis jobs.");
-  }
-
-  return new OpenAI({ apiKey });
-}
+import { generateStructuredOutput } from "../../ai/service";
+import { buildAnalysisInstructions } from "../../ai/system-prompts";
 
 export const runAnalysis = internalAction({
   args: {
@@ -25,46 +15,24 @@ export const runAnalysis = internalAction({
   },
   handler: async (ctx, args) => {
     try {
-      const internalDetail = await ctx.runQuery(internal.analyses.getInternal, {
+      const analysis = await ctx.runQuery(internal.internal.analyses.queries.getInternal, {
         analysisId: args.analysisId,
       });
 
-      const client = getClient();
-      const model = process.env.OPENAI_ANALYSIS_MODEL ?? "gpt-4.1-mini";
-      const snapshotMarkdown = formatAnalysisSnapshot(
-        internalDetail.analysis.snapshot as Parameters<
-          typeof formatAnalysisSnapshot
-        >[0]
-      );
-      const completion = await client.chat.completions.parse({
-        model,
-        messages: [
-          {
-            role: "developer",
-            content: buildAnalysisInstructions(),
-          },
-          {
-            role: "user",
-            content: snapshotMarkdown,
-          },
-        ],
-        response_format: zodResponseFormat(
-          analysisOutputSchema,
-          "creator_lab_analysis_output"
-        ),
+      const parsed = await generateStructuredOutput({
+        instructions: buildAnalysisInstructions(),
+        userInput: formatAnalysisSnapshot(analysis.snapshot),
+        schema: analysisOutputSchema,
+        schemaName: "creator_lab_analysis_output",
+        missingOutputMessage: "OpenAI returned no structured analysis output.",
       });
 
-      const parsed = completion.choices[0]?.message.parsed;
-      if (!parsed) {
-        throw new Error("OpenAI returned no structured analysis output.");
-      }
-
-      await ctx.runMutation(api.analyses.complete, {
+      await ctx.runMutation(internal.internal.analyses.mutations.complete, {
         analysisId: args.analysisId,
         output: parsed,
       });
     } catch (error) {
-      await ctx.runMutation(api.analyses.fail, {
+      await ctx.runMutation(internal.internal.analyses.mutations.fail, {
         analysisId: args.analysisId,
         errorMessage:
           error instanceof Error ? error.message : "Analysis generation failed.",

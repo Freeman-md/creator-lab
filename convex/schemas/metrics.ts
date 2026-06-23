@@ -12,3 +12,4 @@ export const metricsFields = {
 }
 
 export const metricsTable = defineTable(metricsFields).index("by_postId", ["postId"])
+

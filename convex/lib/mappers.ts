@@ -86,7 +86,7 @@ export function toBriefRecord(brief: Doc<"briefs"> | null) {
     postId: brief.postId,
     analysisId: brief.analysisId,
     status: brief.status,
-    input: brief.input,
+    snapshot: brief.snapshot,
     repeat: brief.repeat,
     avoid: brief.avoid,
     improve: brief.improve,
@@ -120,4 +120,37 @@ export function toAnalysisSnapshotMetrics(metrics: Doc<"metrics"> | null) {
     reposts: metrics?.reposts ?? 0,
     profileVisits: metrics?.profileVisits ?? 0,
   };
+}
+
+export function toBriefSnapshot(
+  post: Doc<"posts">,
+  analysis: Doc<"analyses">,
+  lessons: Doc<"lessons">[],
+  patterns: Doc<"patterns">[],
+) {
+  return {
+    sourcePost: {
+      title: post.title,
+      body: post.body,
+      publishedDateTime: post.publishedDateTime,
+      goal: post.goal,
+      category: post.category,
+      audience: post.audience,
+    },
+    analysis: {
+      content: analysis.content ?? "",
+      reasoning: analysis.reasoning ?? "",
+      confidence: analysis.confidence ?? "low",
+    },
+    lessons: lessons.map((lesson) => ({
+      type: lesson.type,
+      content: lesson.content,
+    })),
+    patterns: patterns.map((pattern) => ({
+      sentiment: pattern.sentiment,
+      score: pattern.score,
+      name: pattern.name,
+      description: pattern.description,
+    })),
+  }
 }
