@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { api } from "@convex/_generated/api";
-import { AppShell } from "@/shared/components/app-shell";
+import { AppShell } from "@/components/ui/app-shell";
 import { PostEditorForm } from "@/modules/posts/components/post-editor-form";
 import { PostFormSubmitValues } from "@/modules/posts/types";
 

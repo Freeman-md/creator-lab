@@ -13,9 +13,9 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/u
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
-import { AppShell } from "@/shared/components/app-shell";
-import { StatusBadge } from "@/shared/components/status-badge";
-import { BRIEF_STATUS_LABELS } from "@/shared/constants/status";
+import { AppShell } from "@/components/ui/app-shell";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { BRIEF_STATUS_LABELS } from "@/lib/constants/status";
 
 type BriefDetailViewProps = {
   analysisId: string;

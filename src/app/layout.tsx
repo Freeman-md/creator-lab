@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Geist_Mono, Hanken_Grotesk, Inter } from "next/font/google";
 
 import "./globals.css";
-import { Providers } from "./providers";
+import { ClerkProvider } from "@clerk/nextjs";
+import ConvexClientProvider from "@/components/ConvexClientProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,7 +37,12 @@ export default function RootLayout({
       className={`${inter.variable} ${hankenGrotesk.variable} ${geistMono.variable} h-full bg-background antialiased`}
     >
       <body className="min-h-full bg-background text-foreground">
-        <Providers>{children}</Providers>
+        <ClerkProvider>
+          <ConvexClientProvider>
+            {children}
+          </ConvexClientProvider>
+          <Toaster richColors position="top-right" />
+        </ClerkProvider>
       </body>
     </html>
   );

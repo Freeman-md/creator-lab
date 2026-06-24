@@ -13,12 +13,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
-import { AppShell } from "@/shared/components/app-shell";
-import { StatusBadge } from "@/shared/components/status-badge";
+import { AppShell } from "@/components/ui/app-shell";
+import { StatusBadge } from "@/components/ui/status-badge";
 import {
   ANALYSIS_STATUS_LABELS,
   BRIEF_STATUS_LABELS,
-} from "@/shared/constants/status";
+} from "@/lib/constants/status";
 
 type AnalysisDetailViewProps = {
   postId: string;
@@ -246,7 +246,7 @@ function ConnectedAnalysisDetailView({
                 </div>
               )}
               {detail.analysis.status === "completed" &&
-              detail.brief?.status === "failed" ? (
+                detail.brief?.status === "failed" ? (
                 <Button disabled={isRetryingBrief} onClick={handleRetryBrief}>
                   Retry brief generation
                 </Button>
@@ -354,5 +354,5 @@ export function AnalysisDetailView({
   postId,
   analysisId,
 }: AnalysisDetailViewProps) {
-return <ConnectedAnalysisDetailView postId={postId} analysisId={analysisId} />;
+  return <ConnectedAnalysisDetailView postId={postId} analysisId={analysisId} />;
 }

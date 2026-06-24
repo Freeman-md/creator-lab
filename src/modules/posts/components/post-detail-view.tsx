@@ -17,12 +17,12 @@ import { MetricsFormCard } from "@/modules/metrics/components/metrics-form-card"
 import { PostEditorForm } from "@/modules/posts/components/post-editor-form";
 import { MetricsFormValues } from "@/modules/metrics/types";
 import { PostFormSubmitValues } from "@/modules/posts/types";
-import { AppShell } from "@/shared/components/app-shell";
-import { StatusBadge } from "@/shared/components/status-badge";
+import { AppShell } from "@/components/ui/app-shell";
+import { StatusBadge } from "@/components/ui/status-badge";
 import {
   ANALYSIS_STATUS_LABELS,
   BRIEF_STATUS_LABELS,
-} from "@/shared/constants/status";
+} from "@/lib/constants/status";
 
 type PostDetailViewProps = {
   postId: string;
