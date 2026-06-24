@@ -23,14 +23,9 @@ function ConvexProviders({ children }: ProvidersProps) {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem={false}
-      disableTransitionOnChange
-    >
+    <>
       <ConvexProviders>{children}</ConvexProviders>
       <Toaster richColors position="top-right" />
-    </ThemeProvider>
+    </>
   );
 }

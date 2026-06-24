@@ -32,7 +32,6 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      suppressHydrationWarning
       className={`${inter.variable} ${hankenGrotesk.variable} ${geistMono.variable} h-full bg-background antialiased`}
     >
       <body className="min-h-full bg-background text-foreground">

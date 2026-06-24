@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { format } from "date-fns";
 import { FileTextIcon, PlusIcon } from "lucide-react";
 import { useQuery } from "convex/react";
 
@@ -19,17 +18,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@convex/_generated/api";
 import { AppShell } from "@/shared/components/app-shell";
 import { StatusBadge } from "@/shared/components/status-badge";
-import { BackendRequiredState } from "@/shared/components/backend-required-state";
 import {
   ANALYSIS_STATUS_LABELS,
   BRIEF_STATUS_LABELS,
 } from "@/shared/constants/status";
-
-const hasConvex = Boolean(process.env.NEXT_PUBLIC_CONVEX_URL);
-
-function formatPublishedDate(value: string) {
-  return format(new Date(value), "dd MMM yyyy, HH:mm");
-}
+import { formatPublishedDate } from "@/lib/utils";
 
 function getStatusTone(status?: "in_progress" | "completed" | "failed") {
   if (status === "completed") {
@@ -184,15 +177,5 @@ function ConnectedPostLibraryView() {
 }
 
 export function PostLibraryView() {
-  if (!hasConvex) {
-    return (
-      <BackendRequiredState
-        eyebrow="Post Library"
-        title="A focused archive for posts worth learning from."
-        description="Each saved post should move cleanly from metadata to metrics, analysis, and a practical next-post brief."
-      />
-    );
-  }
-
   return <ConnectedPostLibraryView />;
 }
