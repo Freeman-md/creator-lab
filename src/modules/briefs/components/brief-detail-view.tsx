@@ -14,16 +14,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { AppShell } from "@/shared/components/app-shell";
-import { BackendRequiredState } from "@/shared/components/backend-required-state";
 import { StatusBadge } from "@/shared/components/status-badge";
 import { BRIEF_STATUS_LABELS } from "@/shared/constants/status";
 
 type BriefDetailViewProps = {
   analysisId: string;
 };
-
-const hasConvex = Boolean(process.env.NEXT_PUBLIC_CONVEX_URL);
-
 function getStatusTone(status?: "in_progress" | "completed" | "failed") {
   if (status === "completed") {
     return "success" as const;
@@ -256,15 +252,5 @@ function ConnectedBriefDetailView({ analysisId }: BriefDetailViewProps) {
 }
 
 export function BriefDetailView({ analysisId }: BriefDetailViewProps) {
-  if (!hasConvex) {
-    return (
-      <BackendRequiredState
-        eyebrow="Next Post Brief"
-        title="Guidance for the next post, not a generated replacement."
-        description="The brief must stay directional: what to repeat, avoid, improve, and the angle worth testing next."
-      />
-    );
-  }
-
   return <ConnectedBriefDetailView analysisId={analysisId} />;
 }

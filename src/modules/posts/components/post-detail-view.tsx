@@ -18,7 +18,6 @@ import { PostEditorForm } from "@/modules/posts/components/post-editor-form";
 import { MetricsFormValues } from "@/modules/metrics/types";
 import { PostFormSubmitValues } from "@/modules/posts/types";
 import { AppShell } from "@/shared/components/app-shell";
-import { BackendRequiredState } from "@/shared/components/backend-required-state";
 import { StatusBadge } from "@/shared/components/status-badge";
 import {
   ANALYSIS_STATUS_LABELS,
@@ -28,8 +27,6 @@ import {
 type PostDetailViewProps = {
   postId: string;
 };
-
-const hasConvex = Boolean(process.env.NEXT_PUBLIC_CONVEX_URL);
 
 function getStatusTone(status?: "in_progress" | "completed" | "failed") {
   if (status === "completed") {
@@ -297,15 +294,5 @@ function ConnectedPostDetailView({ postId }: PostDetailViewProps) {
 }
 
 export function PostDetailView({ postId }: PostDetailViewProps) {
-  if (!hasConvex) {
-    return (
-      <BackendRequiredState
-        eyebrow="Post Detail"
-        title="One post, one visible feedback loop."
-        description="This screen owns post editing, the latest metrics snapshot, analysis status, and the next action that moves feedback forward."
-      />
-    );
-  }
-
   return <ConnectedPostDetailView postId={postId} />;
 }

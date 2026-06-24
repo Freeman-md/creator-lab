@@ -14,7 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { AppShell } from "@/shared/components/app-shell";
-import { BackendRequiredState } from "@/shared/components/backend-required-state";
 import { StatusBadge } from "@/shared/components/status-badge";
 import {
   ANALYSIS_STATUS_LABELS,
@@ -25,8 +24,6 @@ type AnalysisDetailViewProps = {
   postId: string;
   analysisId: string;
 };
-
-const hasConvex = Boolean(process.env.NEXT_PUBLIC_CONVEX_URL);
 
 function getStatusTone(status?: "in_progress" | "completed" | "failed") {
   if (status === "completed") {
@@ -357,15 +354,5 @@ export function AnalysisDetailView({
   postId,
   analysisId,
 }: AnalysisDetailViewProps) {
-  if (!hasConvex) {
-    return (
-      <BackendRequiredState
-        eyebrow="Analysis Detail"
-        title="Review the output before the next brief is trusted."
-        description="The analysis detail screen owns summary content, reasoning, confidence, grouped lessons, grouped patterns, and brief-generation status."
-      />
-    );
-  }
-
-  return <ConnectedAnalysisDetailView postId={postId} analysisId={analysisId} />;
+return <ConnectedAnalysisDetailView postId={postId} analysisId={analysisId} />;
 }

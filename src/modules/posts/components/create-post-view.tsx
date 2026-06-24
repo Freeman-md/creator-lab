@@ -10,11 +10,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { api } from "@convex/_generated/api";
 import { AppShell } from "@/shared/components/app-shell";
-import { BackendRequiredState } from "@/shared/components/backend-required-state";
 import { PostEditorForm } from "@/modules/posts/components/post-editor-form";
 import { PostFormSubmitValues } from "@/modules/posts/types";
-
-const hasConvex = Boolean(process.env.NEXT_PUBLIC_CONVEX_URL);
 
 function ConnectedCreatePostView() {
   const router = useRouter();
@@ -61,15 +58,5 @@ function ConnectedCreatePostView() {
 }
 
 export function CreatePostView() {
-  if (!hasConvex) {
-    return (
-      <BackendRequiredState
-        eyebrow="Create Post"
-        title="Capture the source post before anything else."
-        description="The post record is the anchor for every later step: metrics, analysis, lessons, patterns, and the next-post brief."
-      />
-    );
-  }
-
   return <ConnectedCreatePostView />;
 }

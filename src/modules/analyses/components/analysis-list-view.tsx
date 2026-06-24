@@ -25,7 +25,6 @@ import {
 import { api } from "@convex/_generated/api";
 import { Id } from "@convex/_generated/dataModel";
 import { AppShell } from "@/shared/components/app-shell";
-import { BackendRequiredState } from "@/shared/components/backend-required-state";
 import { StatusBadge } from "@/shared/components/status-badge";
 import {
   ANALYSIS_STATUS_LABELS,
@@ -35,8 +34,6 @@ import {
 type AnalysisListViewProps = {
   postId: string;
 };
-
-const hasConvex = Boolean(process.env.NEXT_PUBLIC_CONVEX_URL);
 
 function getStatusTone(status?: "in_progress" | "completed" | "failed") {
   if (status === "completed") {
@@ -173,15 +170,5 @@ function ConnectedAnalysisListView({ postId }: AnalysisListViewProps) {
 }
 
 export function AnalysisListView({ postId }: AnalysisListViewProps) {
-  if (!hasConvex) {
-    return (
-      <BackendRequiredState
-        eyebrow="Analyses"
-        title="A complete run history for one post."
-        description="Every analysis stays visible, including failed and stale runs, so the user can compare outputs instead of losing context."
-      />
-    );
-  }
-
   return <ConnectedAnalysisListView postId={postId} />;
 }
