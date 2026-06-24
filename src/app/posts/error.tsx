@@ -82,11 +82,6 @@ export default function ErrorPage({
                         <Link href="/sign-in">Sign in</Link>
                       </Button>
                     ) : null}
-                    {isLoaded && !isSignedIn ? (
-                      <Button asChild variant="outline">
-                        <Link href="/sign-up">Sign up</Link>
-                      </Button>
-                    ) : null}
                     {isLoaded && isSignedIn ? (
                       <SignOutButton>
                         <Button variant="outline">Sign out</Button>

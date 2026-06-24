@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { AuthStatusControls } from "@/components/ui/auth-status-controls";
+import { AuthStatusControls } from "@/components/auth/auth-status-controls";
 import { Button } from "@/components/ui/button";
 
 type AppShellProps = {

@@ -28,11 +28,6 @@ export function AuthStatusControls() {
           <Link href="/sign-in">Sign in</Link>
         </Button>
       ) : null}
-      {!isSignedIn ? (
-        <Button asChild size="sm">
-          <Link href="/sign-up">Sign up</Link>
-        </Button>
-      ) : null}
 
       {isSignedIn ? (
         <>
@@ -54,4 +49,3 @@ export function AuthStatusControls() {
     </div>
   );
 }
-
