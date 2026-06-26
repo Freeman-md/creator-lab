@@ -4,16 +4,24 @@ import { internal } from "./_generated/api";
 import { authMutation, authQuery } from "./server";
 import { toBriefRecord } from "./lib/mappers";
 import { getOwnedBriefOrThrow, getOwnedAnalysisOrThrow } from "./lib/ownership";
+import { getBrief } from "./lib/reads";
 
 
 export const get = authQuery({
   args: {
-    briefId: v.id("briefs"),
+    analysisId: v.id("analyses"),
+    briefId: v.optional(v.id("briefs")),
   },
   handler: async (ctx, args) => {
-    const { brief } = await getOwnedBriefOrThrow(ctx, args.briefId)
+    if (args.briefId) {
+      const { brief } = await getOwnedBriefOrThrow(ctx, args.briefId);
+      return toBriefRecord(brief);
+    }
 
-    return toBriefRecord(brief);
+    await getOwnedAnalysisOrThrow(ctx, args.analysisId);
+    const brief = await getBrief(ctx, args.analysisId);
+
+    return brief ? toBriefRecord(brief) : null;
   },
 });
 
