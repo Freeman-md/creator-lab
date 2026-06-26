@@ -21,6 +21,8 @@ import type * as internal_analyses_queries from "../internal/analyses/queries.js
 import type * as internal_briefs_actions from "../internal/briefs/actions.js";
 import type * as internal_briefs_mutations from "../internal/briefs/mutations.js";
 import type * as internal_briefs_queries from "../internal/briefs/queries.js";
+import type * as internal_lessons_mutations from "../internal/lessons/mutations.js";
+import type * as internal_patterns_mutations from "../internal/patterns/mutations.js";
 import type * as internal_triggers from "../internal/triggers.js";
 import type * as lessons from "../lessons.js";
 import type * as lib_constants from "../lib/constants.js";
@@ -61,6 +63,8 @@ declare const fullApi: ApiFromModules<{
   "internal/briefs/actions": typeof internal_briefs_actions;
   "internal/briefs/mutations": typeof internal_briefs_mutations;
   "internal/briefs/queries": typeof internal_briefs_queries;
+  "internal/lessons/mutations": typeof internal_lessons_mutations;
+  "internal/patterns/mutations": typeof internal_patterns_mutations;
   "internal/triggers": typeof internal_triggers;
   lessons: typeof lessons;
   "lib/constants": typeof lib_constants;
