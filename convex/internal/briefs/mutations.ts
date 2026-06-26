@@ -1,8 +1,71 @@
 import { v } from "convex/values";
 import { BRIEF_STATUS } from "../../lib/constants";
-import { toBriefRecord } from "../../lib/mappers";
-import { getBriefOrThrow } from "../../lib/reads";
+import { toBriefRecord, toBriefSnapshot } from "../../lib/mappers";
+import { getAnalysisOrThrow, getBrief, getBriefOrThrow, getLessons, getPatterns, getPostOrThrow } from "../../lib/reads";
 import { internalMutation } from "../triggers";
+import { internal } from "../../_generated/api";
+import { ANALYSIS_STATUS } from "../../lib/constants";
+
+export const create = internalMutation({
+  args: {
+    analysisId: v.id("analyses"),
+  },
+  handler: async (ctx, args) => {
+    const analysis = await getAnalysisOrThrow(ctx, args.analysisId);
+    const post = await getPostOrThrow(ctx, analysis.postId);
+
+    if (analysis.status !== ANALYSIS_STATUS.COMPLETED) {
+      throw new Error("Brief generation requires a completed analysis.");
+    }
+
+    const existingBrief = await getBrief(ctx, analysis._id);
+
+    if (
+      existingBrief &&
+      (existingBrief.status === BRIEF_STATUS.COMPLETED ||
+        existingBrief.status === BRIEF_STATUS.IN_PROGRESS)
+    ) {
+      return toBriefRecord(existingBrief);
+    }
+
+    const lessons = await getLessons(ctx, analysis._id);
+    const patterns = await getPatterns(ctx, analysis._id);
+
+    if (lessons.length === 0 && patterns.length === 0) {
+      throw new Error("Brief generation requires lessons or patterns from the completed analysis.");
+    }
+
+    const now = Date.now();
+    const snapshot = toBriefSnapshot(post, analysis, lessons, patterns);
+
+    const briefPayload = {
+      postId: analysis.postId,
+      analysisId: args.analysisId,
+      status: BRIEF_STATUS.IN_PROGRESS,
+      snapshot,
+      startedAt: now,
+      updatedAt: now,
+    };
+
+    const briefId = existingBrief
+      ? existingBrief._id
+      : await ctx.db.insert("briefs", briefPayload);
+
+    if (existingBrief) {
+      await ctx.db.replace(existingBrief._id, briefPayload);
+    }
+
+    await ctx.scheduler.runAfter(
+      0,
+      internal.internal.briefs.actions.runBriefGeneration,
+      { briefId }
+    );
+
+    const brief = await getBriefOrThrow(ctx, briefId);
+
+    return toBriefRecord(brief);
+  },
+});
 
 export const complete = internalMutation({
   args: {

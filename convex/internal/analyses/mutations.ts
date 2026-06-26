@@ -4,7 +4,7 @@ import { ANALYSIS_STATUS } from "../../lib/constants";
 import { lesson } from "../../schemas/lessons";
 import { pattern } from "../../schemas/patterns";
 import { getAnalysisOrThrow } from "../../lib/reads";
-import { api, internal } from "../../_generated/api";
+import { internal } from "../../_generated/api";
 import { toAnalysisRecord } from "../../lib/mappers";
 
 export const complete = internalMutation({
@@ -47,20 +47,20 @@ export const complete = internalMutation({
     });
 
     await Promise.all([
-      await ctx.runMutation(internal.lessons.replaceForAnalysis, {
+      await ctx.runMutation(internal.internal.lessons.mutations.replace, {
         postId: analysis.postId,
         analysisId: analysis._id,
         lessons: args.output.lessons,
       }),
 
-      await ctx.runMutation(internal.patterns.replaceForAnalysis, {
+      await ctx.runMutation(internal.internal.patterns.mutations.replace, {
         postId: analysis.postId,
         analysisId: analysis._id,
         patterns: args.output.patterns,
       })
     ])
 
-    await ctx.runMutation(api.briefs.create, {
+    await ctx.runMutation(internal.internal.briefs.mutations.create, {
       analysisId: analysis._id,
     });
 
