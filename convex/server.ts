@@ -23,7 +23,7 @@ const authCtx = customCtx(async (ctx) => {
     throw new ConvexError("Unauthorized.");
   }
 
-  return { userId: identity.tokenIdentifier };
+  return { userId: identity.subject };
 });
 
 export { action, httpAction, internalAction, internalMutation, internalQuery, mutation, query };
