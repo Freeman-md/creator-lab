@@ -8,6 +8,7 @@ import {
 } from "@clerk/nextjs";
 import { AlertTriangleIcon, RefreshCcwIcon, ShieldAlertIcon } from "lucide-react";
 
+import { AuthStatusControls } from "@/components/auth/auth-status-controls";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -27,7 +28,20 @@ export default function ErrorPage({
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="page-shell flex min-h-screen items-center py-12">
+      <header className="border-b border-border/80 bg-background/80 backdrop-blur-sm">
+        <div className="page-shell flex items-center justify-between gap-4 py-6">
+          <div className="flex items-center gap-3">
+            <Link href="/posts" className="font-heading text-lg font-semibold tracking-tight">
+              Creator Lab
+            </Link>
+            <span className="rounded-full border border-border bg-card px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+              V1
+            </span>
+          </div>
+          <AuthStatusControls />
+        </div>
+      </header>
+      <div className="page-shell flex min-h-[calc(100vh-89px)] items-center py-12">
         <Card className="mx-auto w-full max-w-3xl overflow-hidden border-border bg-card shadow-sm">
           <CardHeader className="gap-4 border-b border-border/70 bg-muted/40 pb-6">
             <div className="flex size-12 items-center justify-center rounded-2xl bg-background ring-1 ring-foreground/10">
@@ -71,25 +85,23 @@ export default function ErrorPage({
                 </div>
               </div>
 
-              {isUnauthorized ? (
-                <div className="rounded-2xl border border-border bg-muted/30 p-5">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                    Session actions
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-3">
-                    {isLoaded && !isSignedIn ? (
-                      <Button asChild>
-                        <Link href="/sign-in">Sign in</Link>
-                      </Button>
-                    ) : null}
-                    {isLoaded && isSignedIn ? (
-                      <SignOutButton>
-                        <Button variant="outline">Sign out</Button>
-                      </SignOutButton>
-                    ) : null}
-                  </div>
+              <div className="rounded-2xl border border-border bg-muted/30 p-5">
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  Session actions
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  {isLoaded && !isSignedIn ? (
+                    <Button asChild>
+                      <Link href="/sign-in">Sign in</Link>
+                    </Button>
+                  ) : null}
+                  {isLoaded && isSignedIn ? (
+                    <SignOutButton>
+                      <Button variant="outline">Sign out</Button>
+                    </SignOutButton>
+                  ) : null}
                 </div>
-              ) : null}
+              </div>
             </div>
 
             <div className="rounded-2xl border border-border bg-muted/30 p-5">
