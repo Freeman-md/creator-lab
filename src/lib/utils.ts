@@ -10,6 +10,22 @@ export function formatPublishedDate(value: string) {
   return format(new Date(value), "dd MMM yyyy, HH:mm");
 }
 
+export function getStatusTone(status?: "in_progress" | "completed" | "failed") {
+  if (status === "completed") {
+    return "success" as const;
+  }
+
+  if (status === "failed") {
+    return "danger" as const;
+  }
+
+  if (status === "in_progress") {
+    return "warning" as const;
+  }
+
+  return "neutral" as const;
+}
+
 export function normalizeRedirectTarget(value: string | string[] | null | undefined) {
   const raw = Array.isArray(value) ? value[0] : value;
 

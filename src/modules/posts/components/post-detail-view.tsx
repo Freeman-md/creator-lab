@@ -18,28 +18,11 @@ import { PostEditorForm } from "@/modules/posts/components/post-editor-form";
 import { MetricsFormValues } from "@/modules/metrics/types";
 import { PostFormSubmitValues } from "@/modules/posts/types";
 import { AppShell } from "@/components/ui/app-shell";
-import { StatusBadge } from "@/components/ui/status-badge";
-import {
-  ANALYSIS_STATUS_LABELS,
-  BRIEF_STATUS_LABELS,
-} from "@/lib/constants/status";
+import { PostStatusBadges } from "@/modules/posts/components/post-status-badges";
 
 type PostDetailViewProps = {
   postId: string;
 };
-
-function getStatusTone(status?: "in_progress" | "completed" | "failed") {
-  if (status === "completed") {
-    return "success" as const;
-  }
-  if (status === "failed") {
-    return "danger" as const;
-  }
-  if (status === "in_progress") {
-    return "warning" as const;
-  }
-  return "neutral" as const;
-}
 
 function LoadingView() {
   return (
@@ -132,29 +115,11 @@ function ConnectedPostDetailView({ postId }: PostDetailViewProps) {
       title="One post, one visible feedback loop."
       description="This screen owns post editing, the latest metrics snapshot, analysis status, and the next action that moves feedback forward."
       actions={
-        <>
-          <StatusBadge
-            label={postData.metrics ? "Metrics saved" : "No metrics"}
-            tone={postData.metrics ? "success" : "neutral"}
-          />
-          <StatusBadge
-            label={
-              latestAnalysis
-                ? ANALYSIS_STATUS_LABELS[latestAnalysis.status]
-                : "Analysis not started"
-            }
-            tone={getStatusTone(latestAnalysis?.status)}
-          />
-          {latestBrief ? (
-            <StatusBadge
-              label={BRIEF_STATUS_LABELS[latestBrief.status]}
-              tone={getStatusTone(latestBrief.status)}
-            />
-          ) : null}
-          {latestAnalysis?.stale ? (
-            <StatusBadge label="Stale feedback" tone="warning" />
-          ) : null}
-        </>
+        <PostStatusBadges
+          hasMetrics={Boolean(postData.metrics)}
+          latestAnalysis={latestAnalysis}
+          latestBrief={latestBrief}
+        />
       }
     >
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.8fr)]">
