@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { z } from "zod";
-import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -20,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { PostFormSubmitValues } from "@/modules/posts/types";
+import { toDatetimeLocalValue } from "@/lib/utils";
 
 const postFormSchema = z.object({
   title: z.string(),
@@ -38,14 +38,6 @@ type PostEditorFormProps = {
   submitLabel: string;
   onSubmit: (values: PostFormSubmitValues) => Promise<void> | void;
 };
-
-function toDatetimeLocalValue(value?: string) {
-  if (!value) {
-    return "";
-  }
-
-  return format(new Date(value), "yyyy-MM-dd'T'HH:mm");
-}
 
 export function PostEditorForm({
   defaultValues,

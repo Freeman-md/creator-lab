@@ -10,6 +10,14 @@ export function formatPublishedDate(value: string) {
   return format(new Date(value), "dd MMM yyyy, HH:mm");
 }
 
+export function toDatetimeLocalValue(value?: string) {
+  if (!value) {
+    return "";
+  }
+
+  return format(new Date(value), "yyyy-MM-dd'T'HH:mm");
+}
+
 export function getStatusTone(status?: "in_progress" | "completed" | "failed") {
   if (status === "completed") {
     return "success" as const;
