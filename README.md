@@ -1,5 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Agent Guidance
+
+Project-specific page architecture and refactor guidance lives in:
+
+- `.agents/skills/creator-lab-page-architecture/SKILL.md`
+- `.claude/skills/creator-lab-page-architecture/SKILL.md`
+
+Future feature work and page refactors should consult that skill before making
+architectural extraction or composition decisions.
+
 ## Getting Started
 
 First, run the development server:
