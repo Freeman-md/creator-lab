@@ -1,5 +1,6 @@
 import ConvexClientProvider from "@/components/ConvexClientProvider";
 import { DashboardAuthGate, DashboardFrame } from "@/components/layouts/dashboard";
+import { LinkedInProfileSetupGate } from "@/modules/profiles/components/linkedin-profile-setup-gate";
 
 export default function DashboardLayout({
   children,
@@ -9,7 +10,9 @@ export default function DashboardLayout({
   return (
     <ConvexClientProvider>
       <DashboardFrame>
-        <DashboardAuthGate>{children}</DashboardAuthGate>
+        <DashboardAuthGate>
+          <LinkedInProfileSetupGate>{children}</LinkedInProfileSetupGate>
+        </DashboardAuthGate>
       </DashboardFrame>
     </ConvexClientProvider>
   );

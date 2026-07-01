@@ -6,6 +6,10 @@ export type PostRecord = {
   goal: string;
   category: string;
   audience: string;
+  linkedinPostId?: string;
+  linkedinUrl?: string;
+  source?: "manual" | "linkedin_import";
+  importedAt?: number;
   creationTime: string;
   updatedAt: number;
 };

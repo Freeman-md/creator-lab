@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { FunctionReturnType } from "convex/server";
 
 import { api } from "@convex/_generated/api";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PostStatusBadges } from "@/modules/posts/components/post-status-badges";
@@ -25,6 +26,9 @@ export function PostLibraryCard({ entry }: PostLibraryCardProps) {
             </CardTitle>
           </div>
           <div className="flex flex-wrap gap-2">
+            {entry.post.source === "linkedin_import" ? (
+              <Badge variant="outline">LinkedIn import</Badge>
+            ) : null}
             <PostStatusBadges
               hasMetrics={Boolean(entry.metrics)}
               latestAnalysis={entry.latestAnalysis}

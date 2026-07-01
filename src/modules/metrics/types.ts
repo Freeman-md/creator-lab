@@ -3,9 +3,12 @@ export type MetricsRecord = {
   postId: string;
   impressions: number;
   reactions: number;
+  likes?: number;
   comments: number;
   reposts: number;
+  shares?: number;
   profileVisits: number;
+  reactionBreakdown?: Record<string, number>;
   creationTime: string;
   updatedAt: number;
 };

@@ -43,6 +43,9 @@ export function AppShell({
               <Button asChild size="sm">
                 <Link href="/dashboard/posts/new">New Post</Link>
               </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/dashboard/settings">Settings</Link>
+              </Button>
             </nav>
           </div>
           {actions ? <div className="flex flex-wrap items-center gap-3">{actions}</div> : null}
