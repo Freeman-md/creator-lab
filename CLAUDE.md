@@ -1,6 +1,8 @@
 @AGENTS.md
 
-Before implementing or refactoring workspace pages, consult `.claude/skills/creator-lab-page-architecture/SKILL.md` and follow it as the project-specific source of truth for page composition, extraction, mutation placement, and Next.js page patterns.
+Before implementing or refactoring workspace pages, consult `.claude/skills/frontend-workspace-patterns/SKILL.md` and follow it as the project-specific source of truth for page composition, extraction, mutation placement, and Next.js page patterns.
+
+Before making Convex or backend updates, consult `.claude/skills/backend-workspace-patterns/SKILL.md` and follow it as the project-specific source of truth for domain ownership, public/internal boundaries, auth placement, and backend workflow structure.
 
 <!-- convex-ai-start -->
 

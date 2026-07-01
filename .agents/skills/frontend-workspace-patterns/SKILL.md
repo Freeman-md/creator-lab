@@ -1,12 +1,12 @@
 ---
-name: creator-lab-page-architecture
+name: frontend-workspace-patterns
 description:
   Use before implementing new workspace pages or refactoring existing ones in
   Creator Lab. Captures the established page architecture, extraction rules,
   mutation placement, naming, and Next.js conventions from the posts refactors.
 ---
 
-# Creator Lab Page Architecture
+# Frontend Workspace Patterns
 
 Use this skill before implementing or refactoring route pages in this repo.
 
