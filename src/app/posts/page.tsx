@@ -12,9 +12,6 @@ import { PostLibraryContent } from "@/modules/posts/components/post-library-cont
 export default function PostsPage() {
   const library = useQuery(api.posts.getAll, {});
 
-  console.log(process.env.NEXT_PUBLIC_CONVEX_URL)
-  console.log(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY)
-
   return (
     <AppShell
       eyebrow="Post Library"
