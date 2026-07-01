@@ -19,6 +19,8 @@ import { internalMutation, mutation } from "./internal/triggers";
 const authCtx = customCtx(async (ctx) => {
   const identity = await ctx.auth.getUserIdentity();
 
+  console.log("Identity", identity)
+
   if (!identity) {
     throw new ConvexError("Unauthorized.");
   }
