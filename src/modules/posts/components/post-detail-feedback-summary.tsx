@@ -54,13 +54,13 @@ export function PostDetailFeedbackSummary({
             ) : null}
             <div className="flex flex-wrap gap-3">
               <Button asChild variant="outline">
-                <Link href={`/posts/${postId}/analyses/${latestAnalysis.id}`}>
+                <Link href={`/dashboard/posts/${postId}/analyses/${latestAnalysis.id}`}>
                   Open latest analysis
                 </Link>
               </Button>
               {latestBrief ? (
                 <Button asChild>
-                  <Link href={`/posts/${postId}/analyses/${latestAnalysis.id}/brief`}>
+                  <Link href={`/dashboard/posts/${postId}/analyses/${latestAnalysis.id}/brief`}>
                     Open brief
                   </Link>
                 </Button>

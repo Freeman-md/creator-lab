@@ -13,7 +13,7 @@ type SignInPageProps = {
 export default async function Page({ searchParams }: SignInPageProps) {
   const session = await auth();
   if (session.userId) {
-    redirect("/posts");
+    redirect("/dashboard/posts");
   }
 
   const query = await searchParams;

@@ -56,10 +56,10 @@ export function PostLibraryCard({ entry }: PostLibraryCardProps) {
         </div>
         <div className="flex flex-wrap gap-3">
           <Button asChild>
-            <Link href={`/posts/${entry.post.id}`}>Open Post</Link>
+            <Link href={`/dashboard/posts/${entry.post.id}`}>Open Post</Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href={`/posts/${entry.post.id}/analyses`}>View Analyses</Link>
+            <Link href={`/dashboard/posts/${entry.post.id}/analyses`}>View Analyses</Link>
           </Button>
         </div>
       </CardContent>

@@ -38,11 +38,11 @@ export function normalizeRedirectTarget(value: string | string[] | null | undefi
   const raw = Array.isArray(value) ? value[0] : value;
 
   if (!raw) {
-    return "/posts";
+    return "/dashboard/posts";
   }
 
   if (raw.includes("/.well-known/") || raw.includes("com.chrome.devtools")) {
-    return "/posts";
+    return "/dashboard/posts";
   }
 
   if (raw.startsWith("/")) {
@@ -53,11 +53,11 @@ export function normalizeRedirectTarget(value: string | string[] | null | undefi
     const url = new URL(raw);
 
     if (url.pathname.startsWith("/.well-known/")) {
-      return "/posts";
+      return "/dashboard/posts";
     }
 
-    return `${url.pathname}${url.search}${url.hash}` || "/posts";
+    return `${url.pathname}${url.search}${url.hash}` || "/dashboard/posts";
   } catch {
-    return "/posts";
+    return "/dashboard/posts";
   }
 }

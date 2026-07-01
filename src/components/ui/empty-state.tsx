@@ -31,7 +31,7 @@ export function EmptyState({
       through metrics, analysis, and the brief loop from there.
     </>
   ),
-  actionHref = "/posts/new",
+  actionHref = "/dashboard/posts/new",
   actionLabel = "Create your first post",
   actionIcon = <PlusIcon data-icon="inline-start" />,
 }: EmptyStateProps) {

@@ -26,7 +26,7 @@ export default function NewPostPage() {
 
       toast.success("Post created.");
       
-      router.push(`/posts/${created.id}`);
+      router.push(`/dashboard/posts/${created.id}`);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Post creation failed."
@@ -43,7 +43,7 @@ export default function NewPostPage() {
       description="The post record is the anchor for every later step: metrics, analysis, lessons, patterns, and the next-post brief."
       actions={
         <Button asChild variant="outline">
-          <Link href="/posts">
+          <Link href="/dashboard/posts">
             <ArrowLeftIcon data-icon="inline-start" />
             Back to library
           </Link>

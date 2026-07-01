@@ -31,7 +31,7 @@ export default function ErrorPage({
       <header className="border-b border-border/80 bg-background/80 backdrop-blur-sm">
         <div className="page-shell flex items-center justify-between gap-4 py-6">
           <div className="flex items-center gap-3">
-            <Link href="/posts" className="font-heading text-lg font-semibold tracking-tight">
+            <Link href="/dashboard/posts" className="font-heading text-lg font-semibold tracking-tight">
               Creator Lab
             </Link>
             <span className="rounded-full border border-border bg-card px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
@@ -53,7 +53,7 @@ export default function ErrorPage({
             </div>
             <div className="space-y-2">
               <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                Posts Workspace
+                Dashboard
               </p>
               <CardTitle className="font-heading text-3xl font-semibold tracking-[-0.02em] text-foreground">
                 {isUnauthorized
@@ -80,7 +80,7 @@ export default function ErrorPage({
                     Retry this route
                   </Button>
                   <Button asChild variant="outline" className="justify-center md:justify-start">
-                    <Link href="/posts">Back to library</Link>
+                    <Link href="/dashboard/posts">Back to library</Link>
                   </Button>
                 </div>
               </div>

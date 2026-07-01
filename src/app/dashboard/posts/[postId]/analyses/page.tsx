@@ -40,7 +40,7 @@ export default function AnalysesPage({ params }: AnalysesPageProps) {
             Analysis history
           </CardTitle>
           <Button asChild variant="outline">
-            <Link href={`/posts/${postId}`}>Back to post</Link>
+            <Link href={`/dashboard/posts/${postId}`}>Back to post</Link>
           </Button>
         </CardHeader>
         <CardContent>

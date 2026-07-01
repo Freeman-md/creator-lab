@@ -86,11 +86,11 @@ export function PostDetailAnalysisTrigger({
           {latestAnalysis ? "Run new analysis" : "Trigger analysis"}
         </Button>
         <Button asChild variant="outline" className="w-full">
-          <Link href={`/posts/${postId}/analyses`}>View all analyses</Link>
+          <Link href={`/dashboard/posts/${postId}/analyses`}>View all analyses</Link>
         </Button>
         {latestAnalysis ? (
           <Button asChild variant="outline" className="w-full">
-            <Link href={`/posts/${postId}/analyses/${latestAnalysis.id}`}>
+            <Link href={`/dashboard/posts/${postId}/analyses/${latestAnalysis.id}`}>
               Open latest analysis
             </Link>
           </Button>

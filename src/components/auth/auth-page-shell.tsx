@@ -17,7 +17,7 @@ export function AuthPageShell({
       <div className="page-shell relative flex min-h-screen items-center justify-center py-10">
         <section className="mx-auto w-full max-w-xl">
           <div className="mb-6 flex items-center justify-center gap-3">
-            <Link href="/posts" className="font-heading text-lg font-semibold tracking-tight">
+            <Link href="/" className="font-heading text-lg font-semibold tracking-tight">
               Creator Lab
             </Link>
             <span className="rounded-full border border-border bg-card px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">

@@ -31,11 +31,11 @@ export function AnalysisSummaryCard({
           </CardTitle>
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline">
-              <Link href={`/posts/${postId}/analyses`}>All analyses</Link>
+              <Link href={`/dashboard/posts/${postId}/analyses`}>All analyses</Link>
             </Button>
             {brief ? (
               <Button asChild>
-                <Link href={`/posts/${postId}/analyses/${analysisId}/brief`}>
+                <Link href={`/dashboard/posts/${postId}/analyses/${analysisId}/brief`}>
                   Open Brief
                 </Link>
               </Button>

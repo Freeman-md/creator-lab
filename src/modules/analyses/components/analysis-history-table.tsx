@@ -81,13 +81,13 @@ export function AnalysisHistoryTable({
             <TableCell>
               <div className="flex justify-end gap-2">
                 <Button asChild size="sm" variant="outline">
-                  <Link href={`/posts/${postId}/analyses/${analysis.id}`}>
+                  <Link href={`/dashboard/posts/${postId}/analyses/${analysis.id}`}>
                     Open
                   </Link>
                 </Button>
                 {analysis.brief ? (
                   <Button asChild size="sm">
-                    <Link href={`/posts/${postId}/analyses/${analysis.id}/brief`}>
+                    <Link href={`/dashboard/posts/${postId}/analyses/${analysis.id}/brief`}>
                       Brief
                     </Link>
                   </Button>

@@ -19,7 +19,7 @@ export default function PostsPage() {
       description="Each saved post should move cleanly from metadata to metrics, analysis, and a practical next-post brief."
       actions={
         <Button asChild>
-          <Link href="/posts/new">
+          <Link href="/dashboard/posts/new">
             <PlusIcon data-icon="inline-start" />
             New Post
           </Link>

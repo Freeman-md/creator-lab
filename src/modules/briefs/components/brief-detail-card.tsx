@@ -101,7 +101,7 @@ export function BriefDetailCard({
             Copy Brief
           </Button>
           <Button asChild variant="outline">
-            <Link href={`/posts/${postId}/analyses/${analysisId}`}>
+            <Link href={`/dashboard/posts/${postId}/analyses/${analysisId}`}>
               Back to analysis
             </Link>
           </Button>

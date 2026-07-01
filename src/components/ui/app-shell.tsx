@@ -24,7 +24,7 @@ export function AppShell({
         <div className="page-shell flex flex-col gap-6 py-6">
           <div className="flex items-center justify-between gap-4 border-b border-border/60 pb-4">
             <div className="flex items-center gap-3">
-              <Link href="/posts" className="font-heading text-lg font-semibold tracking-tight">
+              <Link href="/dashboard/posts" className="font-heading text-lg font-semibold tracking-tight">
                 Creator Lab
               </Link>
               <span className="rounded-full border border-border bg-card px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
@@ -51,10 +51,10 @@ export function AppShell({
             </div>
             <nav className="flex items-center gap-2 self-start">
               <Button asChild variant="ghost" size="sm">
-                <Link href="/posts">Library</Link>
+                <Link href="/dashboard/posts">Library</Link>
               </Button>
               <Button asChild size="sm">
-                <Link href="/posts/new">New Post</Link>
+                <Link href="/dashboard/posts/new">New Post</Link>
               </Button>
             </nav>
           </div>

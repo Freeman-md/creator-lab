@@ -3,7 +3,6 @@ import { Geist_Mono, Hanken_Grotesk, Inter } from "next/font/google";
 
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import ConvexClientProvider from "@/components/ConvexClientProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
@@ -38,9 +37,7 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-background text-foreground">
         <ClerkProvider>
-          <ConvexClientProvider>
-            {children}
-          </ConvexClientProvider>
+          {children}
           <Toaster richColors position="top-right" />
         </ClerkProvider>
       </body>
