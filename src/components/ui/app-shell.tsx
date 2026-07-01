@@ -1,6 +1,4 @@
 import Link from "next/link";
-
-import { AuthStatusControls } from "@/components/auth/auth-status-controls";
 import { Button } from "@/components/ui/button";
 
 type AppShellProps = {
@@ -19,20 +17,9 @@ export function AppShell({
   children,
 }: AppShellProps) {
   return (
-    <div className="min-h-screen pb-16">
-      <header className="border-b border-border/80 bg-background/80 backdrop-blur-sm">
+    <div className="pb-16">
+      <section className="border-b border-border/80 bg-background/80 backdrop-blur-sm">
         <div className="page-shell flex flex-col gap-6 py-6">
-          <div className="flex items-center justify-between gap-4 border-b border-border/60 pb-4">
-            <div className="flex items-center gap-3">
-              <Link href="/dashboard/posts" className="font-heading text-lg font-semibold tracking-tight">
-                Creator Lab
-              </Link>
-              <span className="rounded-full border border-border bg-card px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                V1
-              </span>
-            </div>
-            <AuthStatusControls />
-          </div>
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div className="space-y-3">
               <div className="space-y-2">
@@ -60,7 +47,7 @@ export function AppShell({
           </div>
           {actions ? <div className="flex flex-wrap items-center gap-3">{actions}</div> : null}
         </div>
-      </header>
+      </section>
       <main className="page-shell pt-8">{children}</main>
     </div>
   );

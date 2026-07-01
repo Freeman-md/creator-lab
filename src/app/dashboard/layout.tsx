@@ -1,5 +1,5 @@
 import ConvexClientProvider from "@/components/ConvexClientProvider";
-import { DashboardAuthGate } from "@/components/auth/dashboard-auth-gate";
+import { DashboardAuthGate, DashboardFrame } from "@/components/layouts/dashboard";
 
 export default function DashboardLayout({
   children,
@@ -8,7 +8,9 @@ export default function DashboardLayout({
 }>) {
   return (
     <ConvexClientProvider>
-      <DashboardAuthGate>{children}</DashboardAuthGate>
+      <DashboardFrame>
+        <DashboardAuthGate>{children}</DashboardAuthGate>
+      </DashboardFrame>
     </ConvexClientProvider>
   );
 }
