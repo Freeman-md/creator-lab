@@ -20,9 +20,13 @@ export function didMetricsChange(
   return (
     oldMetrics.impressions !== newMetrics.impressions ||
     oldMetrics.reactions !== newMetrics.reactions ||
+    oldMetrics.likes !== newMetrics.likes ||
     oldMetrics.comments !== newMetrics.comments ||
     oldMetrics.reposts !== newMetrics.reposts ||
-    oldMetrics.profileVisits !== newMetrics.profileVisits
+    oldMetrics.shares !== newMetrics.shares ||
+    oldMetrics.profileVisits !== newMetrics.profileVisits ||
+    JSON.stringify(oldMetrics.reactionBreakdown ?? {}) !==
+      JSON.stringify(newMetrics.reactionBreakdown ?? {})
   );
 }
 

@@ -10,17 +10,23 @@ type UpsertMetricsArgs = {
   postId: Id<"posts">;
   impressions?: number;
   reactions?: number;
+  likes?: number;
   comments?: number;
   reposts?: number;
+  shares?: number;
   profileVisits?: number;
+  reactionBreakdown?: Record<string, number>;
 };
 
 type MetricsPatchPayload = {
   impressions?: number;
   reactions?: number;
+  likes?: number;
   comments?: number;
   reposts?: number;
+  shares?: number;
   profileVisits?: number;
+  reactionBreakdown?: Record<string, number>;
   updatedAt: number;
 };
 
@@ -31,10 +37,15 @@ function getUpsertPayload(args: UpsertMetricsArgs): MetricsPatchPayload {
 
   if (args.impressions !== undefined) payload.impressions = args.impressions;
   if (args.reactions !== undefined) payload.reactions = args.reactions;
+  if (args.likes !== undefined) payload.likes = args.likes;
   if (args.comments !== undefined) payload.comments = args.comments;
   if (args.reposts !== undefined) payload.reposts = args.reposts;
+  if (args.shares !== undefined) payload.shares = args.shares;
   if (args.profileVisits !== undefined) {
     payload.profileVisits = args.profileVisits;
+  }
+  if (args.reactionBreakdown !== undefined) {
+    payload.reactionBreakdown = args.reactionBreakdown;
   }
 
   return payload;
@@ -55,9 +66,12 @@ export const upsert = authMutation({
     postId: v.id("posts"),
     impressions: v.optional(v.number()),
     reactions: v.optional(v.number()),
+    likes: v.optional(v.number()),
     comments: v.optional(v.number()),
     reposts: v.optional(v.number()),
+    shares: v.optional(v.number()),
     profileVisits: v.optional(v.number()),
+    reactionBreakdown: v.optional(v.record(v.string(), v.number())),
   },
   handler: async (ctx, args) => {
     await getOwnedPostOrThrow(ctx, args.postId);
@@ -75,9 +89,12 @@ export const upsert = authMutation({
         postId: args.postId,
         impressions: args.impressions ?? 0,
         reactions: args.reactions ?? 0,
+        likes: args.likes,
         comments: args.comments ?? 0,
         reposts: args.reposts ?? 0,
+        shares: args.shares,
         profileVisits: args.profileVisits ?? 0,
+        reactionBreakdown: args.reactionBreakdown,
         updatedAt: payload.updatedAt,
       });
     }
