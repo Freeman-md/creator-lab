@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { formatAnalysisSnapshot } from "@convex/ai/formatAnalysisSnapshot";
-import { formatBriefInput } from "@convex/ai/formatBriefInput";
+import { formatAnalysisSnapshot } from "@convex/ai/formatters/AnalysisSnapshot";
+import { formatBriefInput } from "@convex/ai/formatters/BriefSnapshot";
 import {
   analysisOutputSchema,
   briefOutputSchema,
