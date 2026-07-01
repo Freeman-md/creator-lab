@@ -1,5 +1,5 @@
-import { GoogleAuthPanel } from "@/components/auth/google-auth-panel";
 import { AuthPageShell } from "@/components/auth/auth-page-shell";
+import { SocialAuthPanel } from "@/components/auth/social-auth-panel";
 import { normalizeRedirectTarget } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -22,9 +22,9 @@ export default async function Page({ searchParams }: SignInPageProps) {
   return (
     <AuthPageShell
       title="Sign in to Creator Lab"
-      description="Use Google to open your Creator Lab workspace."
+      description="Use Google or LinkedIn to open your Creator Lab workspace."
     >
-      <GoogleAuthPanel redirectUrlComplete={redirectUrlComplete} />
+      <SocialAuthPanel redirectUrlComplete={redirectUrlComplete} />
     </AuthPageShell>
   );
 }
