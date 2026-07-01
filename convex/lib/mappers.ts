@@ -10,6 +10,10 @@ export function toPostRecord(post: Doc<"posts">) {
     goal: post.goal,
     category: post.category,
     audience: post.audience,
+    linkedinPostId: post.linkedinPostId,
+    linkedinUrl: post.linkedinUrl,
+    source: post.source ?? "manual",
+    importedAt: post.importedAt,
     creationTime: new Date(post._creationTime).toISOString(),
     updatedAt: post.updatedAt,
   };
@@ -25,11 +29,70 @@ export function toMetricsRecord(metrics: Doc<"metrics"> | null) {
     postId: metrics.postId,
     impressions: metrics.impressions,
     reactions: metrics.reactions,
+    likes: metrics.likes,
     comments: metrics.comments,
     reposts: metrics.reposts,
+    shares: metrics.shares,
     profileVisits: metrics.profileVisits,
+    reactionBreakdown: metrics.reactionBreakdown,
     creationTime: new Date(metrics._creationTime).toISOString(),
     updatedAt: metrics.updatedAt,
+  };
+}
+
+export function toProfileRecord(profile: Doc<"profiles"> | null) {
+  if (!profile) {
+    return null;
+  }
+
+  return {
+    id: profile._id,
+    userId: profile.userId,
+    linkedinProfileUrl: profile.linkedinProfileUrl,
+    linkedinPublicIdentifier: profile.linkedinPublicIdentifier,
+    linkedinAuthorId: profile.linkedinAuthorId,
+    creationTime: new Date(profile._creationTime).toISOString(),
+    updatedAt: profile.updatedAt,
+  };
+}
+
+export function toLinkedInPostSyncRecord(
+  sync: Doc<"linkedinPostSyncs"> | null
+) {
+  if (!sync) {
+    return {
+      status: "idle" as const,
+      startedAt: undefined,
+      completedAt: undefined,
+      lastSuccessfulSyncAt: undefined,
+      errorMessage: undefined,
+      fetched: 0,
+      imported: 0,
+      skippedDuplicate: 0,
+      skippedInvalid: 0,
+      skippedRepost: 0,
+      skippedNonOwned: 0,
+      metricsUpdated: 0,
+      failed: 0,
+    };
+  }
+
+  return {
+    id: sync._id,
+    userId: sync.userId,
+    status: sync.status,
+    startedAt: sync.startedAt,
+    completedAt: sync.completedAt,
+    lastSuccessfulSyncAt: sync.lastSuccessfulSyncAt,
+    errorMessage: sync.errorMessage,
+    fetched: sync.fetched,
+    imported: sync.imported,
+    skippedDuplicate: sync.skippedDuplicate,
+    skippedInvalid: sync.skippedInvalid,
+    skippedRepost: sync.skippedRepost,
+    skippedNonOwned: sync.skippedNonOwned,
+    metricsUpdated: sync.metricsUpdated,
+    failed: sync.failed,
   };
 }
 

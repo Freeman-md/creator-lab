@@ -2,6 +2,26 @@ import { Id } from "../_generated/dataModel";
 import { MutationCtx, QueryCtx } from "../_generated/server";
 import { ANALYSIS_STATUS } from "./constants";
 
+export async function getProfileByUserId(
+  ctx: QueryCtx | MutationCtx,
+  userId: string
+) {
+  return await ctx.db
+    .query("profiles")
+    .withIndex("by_userId", (q) => q.eq("userId", userId))
+    .unique();
+}
+
+export async function getLinkedInPostSyncByUserId(
+  ctx: QueryCtx | MutationCtx,
+  userId: string
+) {
+  return await ctx.db
+    .query("linkedinPostSyncs")
+    .withIndex("by_userId", (q) => q.eq("userId", userId))
+    .unique();
+}
+
 export async function getMetrics(
   ctx: QueryCtx | MutationCtx,
   postId: Id<"posts">
