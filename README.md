@@ -38,6 +38,7 @@ The current V1 implementation includes:
 - Brief detail view with next-post guidance.
 - Failure handling for both analyses and briefs.
 - Stale-analysis detection when a post or its metrics change after completion.
+- Manual fire-and-forget LinkedIn post ingestion through Apify.
 - Thin route pages with module-level UI components and Convex hooks.
 - Production-oriented frontend and backend separation for Vercel + Convex deployment.
 
@@ -304,6 +305,8 @@ The repository directly references these environment variables:
 ```bash
 NEXT_PUBLIC_CONVEX_URL=
 OPENAI_API_KEY=
+APIFY_TOKEN=
+APIFY_LINKEDIN_POST_SEARCH_ACTOR_ID=
 CLERK_JWT_ISSUER_DOMAIN=
 ```
 
@@ -311,6 +314,8 @@ Notes:
 
 - `NEXT_PUBLIC_CONVEX_URL` is required by the frontend Convex client provider.
 - `OPENAI_API_KEY` is required by Convex background AI actions.
+- `APIFY_TOKEN` is required by the LinkedIn post sync background action.
+- `APIFY_LINKEDIN_POST_SEARCH_ACTOR_ID` optionally overrides the default `harvestapi/linkedin-post-search` actor.
 - `CLERK_JWT_ISSUER_DOMAIN` is required by `convex/auth.config.ts` so Convex can validate Clerk-issued JWTs.
 - Clerk also requires its own application configuration, but those variable names are not referenced directly in this repository, so they are not enumerated here.
 
@@ -401,6 +406,8 @@ Deploy the Next.js app to Vercel with the required frontend environment variable
 Deploy Convex separately with the Convex CLI. In practice that means promoting or deploying your Convex project and ensuring the backend environment has:
 
 - `OPENAI_API_KEY`
+- `APIFY_TOKEN`
+- `APIFY_LINKEDIN_POST_SEARCH_ACTOR_ID`
 - `CLERK_JWT_ISSUER_DOMAIN`
 
 If you are deploying to a fresh environment, make sure the Clerk issuer configured in Convex matches the Clerk instance used by the frontend.
@@ -418,13 +425,14 @@ Creator Lab V1 includes:
 - structured lesson and pattern extraction
 - next-post brief generation
 - stale-state handling for outdated analyses
+- manual LinkedIn post ingestion
 - background AI processing with failure states
 
 ## Out of Scope for V1
 
 These are intentionally not part of the current implementation:
 
-- LinkedIn scraping or ingestion
+- scheduled or fully automated LinkedIn ingestion
 - LinkedIn post scheduling or publishing
 - generic AI chat assistant behavior
 - content calendar management
@@ -440,7 +448,7 @@ These are intentionally not part of the current implementation:
 Likely next areas, based on the product direction already visible in the codebase:
 
 1. History-aware brief generation across more than one analysis run
-2. LinkedIn ingestion rather than manual post entry
+2. Scheduled LinkedIn ingestion rather than manual sync
 3. MCP/server integration for external tooling
 4. Notifications around completed analyses and briefs
 5. Calendar or planning workflows built on top of the feedback loop
