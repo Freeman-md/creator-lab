@@ -24,7 +24,7 @@ const providers = [
   {
     label: "Continue with LinkedIn",
     loadingLabel: "Opening LinkedIn...",
-    strategy: "oauth_linkedin",
+    strategy: "oauth_linkedin_oidc",
     Icon: LinkedInIcon,
   },
 ] as const;
